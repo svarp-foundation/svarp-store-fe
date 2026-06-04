@@ -1,28 +1,154 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #1e5e3a;
+  --color-secondary: #4a7c59;
+  --color-accent: #c18c5d;
+  --font-serif: "Lora", "Playfair Display", serif;
+  --font-sans: "Inter", "Poppins", sans-serif;
+  --transition-custom: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --animate-fade-in: fadeIn 1s ease-out forwards;
+  --animate-slide-right: slideRight 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+  --animate-slide-left: slideLeft 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+  --animate-slide-up: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slideRight {
+    from { opacity: 0; transform: translateX(-40px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slideLeft {
+    from { opacity: 0; transform: translateX(40px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --primary: #1e5e3a;
+  --primary-hover: #15462a;
+  --secondary: #4a7c59;
+  --accent: #c18c5d;
+  --bg-gradient: linear-gradient(135deg, #f7f9f6 0%, #f1f5f0 100%);
+  --font-serif: "Lora", "Playfair Display", serif;
+  --font-sans: "Inter", "Poppins", sans-serif;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body {
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 320px;
+  font-family: var(--font-sans);
+  color: #20362a;
+  background: var(--bg-gradient);
   min-height: 100vh;
-  background-color: #0c0c14;
+  overflow-x: hidden;
+  line-height: 1.6;
 }
 
-#root {
-  width: 100%;
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #f1f5f0; }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; border: 2px solid #f1f5f0; }
+::-webkit-scrollbar-thumb:hover { background: var(--secondary); }
+* { scrollbar-width: thin; scrollbar-color: var(--primary) #f1f5f0; }
+
+h1, h2, h3, .brand { font-family: var(--font-serif); font-weight: 700; }
+button { cursor: pointer; border: none; background-color: transparent; font-family: inherit; }
+
+/* Lenis Smooth Scroll */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+.lenis.lenis-scrolling iframe { pointer-events: none; }
+
+sup { font-size: 0.5em; margin-left: 1px; opacity: 0.8; font-weight: 400; }
+
+/* Skeleton loading animation */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
+.skeleton {
+  background: linear-gradient(90deg, rgba(30,94,58,0.06) 25%, rgba(30,94,58,0.12) 50%, rgba(30,94,58,0.06) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+/* Global Mobile Optimizations */
+@media (max-width: 768px) {
+  :root { font-size: 14px; }
+  body { line-height: 1.5; }
+  section { padding-top: 2rem !important; padding-bottom: 2rem !important; gap: 1.5rem !important; }
+  .py-8, .py-10, .py-12, .py-16, .py-20 { padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; }
+  .px-8, .px-10, .px-12, .px-16 { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
+  .gap-8, .gap-10, .gap-12, .gap-16 { gap: 1rem !important; }
+  .mb-8, .mb-10, .mb-12, .mb-16 { margin-bottom: 1rem !important; }
+  .mt-8, .mt-10, .mt-12, .mt-16 { margin-top: 1rem !important; }
+  .max-w-\[1400px\] { padding-left: 1rem !important; padding-right: 1rem !important; }
+}
+
+@media (max-width: 480px) {
+  :root { font-size: 13px; }
+  .px-4 { padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
+}
+
+/* Brand Color Utility Classes (External CSS) */
+.text-brand-primary {
+  color: var(--primary);
+}
+.text-brand-primary-75 {
+  color: rgba(30, 94, 58, 0.75);
+}
+.text-brand-secondary {
+  color: var(--secondary);
+}
+.text-brand-accent {
+  color: var(--accent);
+}
+.text-brand-dark-muted {
+  color: rgba(45, 58, 48, 0.65);
+}
+.text-brand-dark-semi {
+  color: rgba(45, 58, 48, 0.75);
+}
+.text-brand-dark-light {
+  color: rgba(45, 58, 48, 0.85);
+}
+
+.bg-brand-primary {
+  background-color: var(--primary);
+}
+.bg-brand-primary-hover:hover {
+  background-color: var(--primary-hover);
+}
+.bg-brand-primary-10 {
+  background-color: rgba(30, 94, 58, 0.10);
+}
+.bg-brand-primary-5 {
+  background-color: rgba(30, 94, 58, 0.05);
+}
+.bg-brand-accent {
+  background-color: var(--accent);
+}
+
+.border-brand-primary {
+  border-color: var(--primary);
+}
+.border-brand-primary-15 {
+  border-color: rgba(30, 94, 58, 0.15);
+}
+.border-brand-primary-10 {
+  border-color: rgba(30, 94, 58, 0.10);
+}
+.border-brand-primary-5 {
+  border-color: rgba(30, 94, 58, 0.05);
+}
+
