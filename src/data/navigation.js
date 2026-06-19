@@ -9,7 +9,7 @@ export const footerLinks = {
   contactInfo: {
     email: import.meta.env.VITE_CONTACT_EMAIL || "support@svarpbodywellness.org",
     phone: import.meta.env.VITE_CONTACT_PHONE || "+91 12345 67890",
-    address: "123, Green Avenue, Eco City, India - 560001",
+    address: import.meta.env.VITE_CONTACT_ADDRESS || "123, Green Avenue, Eco City, India - 560001",
   },
   quickLinks: [
     { name: "Home", path: "/" },
@@ -32,4 +32,11 @@ export const footerLinks = {
     { name: "Terms & Conditions", path: "#" },
     { name: "Privacy Policy", path: "#" },
   ],
+};
+
+export const socialLinks = {
+  facebook: import.meta.env.VITE_SOCIAL_FACEBOOK || "#",
+  instagram: import.meta.env.VITE_SOCIAL_INSTAGRAM || "#",
+  youtube: import.meta.env.VITE_SOCIAL_YOUTUBE || "#",
+  linkedin: import.meta.env.VITE_SOCIAL_LINKEDIN || "#",
 };

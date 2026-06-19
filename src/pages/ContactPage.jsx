@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import Footer from "../components/Footer";
 import { Mail, Phone, MapPin, Send, Leaf } from "lucide-react";
+import { footerLinks } from "../data/navigation";
 
 const ContactPage = () => {
+  const { email, phone, address } = footerLinks.contactInfo;
   const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
 
@@ -27,9 +29,9 @@ const ContactPage = () => {
           {/* Contact Info Card Grid */}
           <div className="flex flex-col gap-6">
             {[
-              { icon: <Mail size={22} className="text-brand-primary" />, title: "Email", info: "support@svarpbodywellness.org", link: "mailto:support@svarpbodywellness.org" },
-              { icon: <Phone size={22} className="text-brand-primary" />, title: "Phone", info: "+91 12345 67890", link: "tel:+911234567890" },
-              { icon: <MapPin size={22} className="text-brand-primary" />, title: "Address", info: "123, Green Avenue, Eco City, India - 560001", link: null },
+              { icon: <Mail size={22} className="text-brand-primary" />, title: "Email", info: email, link: email ? `mailto:${email}` : null },
+              { icon: <Phone size={22} className="text-brand-primary" />, title: "Phone", info: phone, link: phone ? `tel:${phone}` : null },
+              { icon: <MapPin size={22} className="text-brand-primary" />, title: "Address", info: address, link: null },
             ].map((item, i) => (
               <div key={i} className="bg-white rounded-3xl p-6 border border-brand-primary-5 shadow-sm flex items-start gap-4">
                 <div className="w-10 h-10 rounded-2xl bg-brand-primary-10 flex items-center justify-center flex-shrink-0">
