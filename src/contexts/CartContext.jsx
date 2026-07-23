@@ -23,11 +23,17 @@ export const CartProvider = ({ children }) => {
     setCartItems((prev) => {
       const existingItem = prev.find(
         (item) =>
-          item.id === product.id && item.variant_id === product.variant_id,
+          item.id === product.id &&
+          ((product.variant_id && item.variant_id === product.variant_id) ||
+            (product.sku && item.sku === product.sku) ||
+            (!product.variant_id && !item.variant_id)),
       );
       if (existingItem) {
         return prev.map((item) =>
-          item.id === product.id && item.variant_id === product.variant_id
+          item.id === product.id &&
+          ((product.variant_id && item.variant_id === product.variant_id) ||
+            (product.sku && item.sku === product.sku) ||
+            (!product.variant_id && !item.variant_id))
             ? { ...item, quantity: item.quantity + 1 }
             : item,
         );
@@ -40,19 +46,24 @@ export const CartProvider = ({ children }) => {
     setIsCartOpen(true);
   };
 
-  const removeFromCart = (productId, variantId) => {
+  const removeFromCart = (productId, variantId, sku) => {
     setCartItems((prev) =>
       prev.filter(
-        (item) => item.id !== productId || item.variant_id !== variantId,
+        (item) =>
+          item.id !== productId ||
+          ((variantId && item.variant_id !== variantId) && (sku && item.sku !== sku)),
       ),
     );
   };
 
-  const updateQuantity = (productId, variantId, quantity) => {
+  const updateQuantity = (productId, variantId, quantity, sku) => {
     if (quantity < 1) return;
     setCartItems((prev) =>
       prev.map((item) =>
-        item.id === productId && item.variant_id === variantId
+        item.id === productId &&
+        ((variantId && item.variant_id === variantId) ||
+          (sku && item.sku === sku) ||
+          (!variantId && !item.variant_id))
           ? { ...item, quantity }
           : item,
       ),
