@@ -8,7 +8,23 @@ const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
   const navigate = useNavigate();
 
-  const imageUrl = product.image || product.images?.[0] || "/images/placeholder.webp";
+  const getProductImage = (prod) => {
+    if (prod.image) return prod.image;
+    if (prod.images && prod.images.length > 0 && prod.images[0]) return prod.images[0];
+
+    const variants = prod.real_variants || prod.variants || [];
+    for (const v of variants) {
+      if (v.images && Array.isArray(v.images) && v.images.length > 0 && v.images[0]) {
+        return v.images[0];
+      }
+      if (v.image) {
+        return v.image;
+      }
+    }
+    return "/images/placeholder.webp";
+  };
+
+  const imageUrl = getProductImage(product);
 
   // Mock pricing and reviews for premium mockup fidelity matching the user's design image
   const originalPrice = product.price ? Math.round(product.price * 1.25) : 249;
