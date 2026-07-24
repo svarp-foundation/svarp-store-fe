@@ -74,8 +74,6 @@ const ProductDetail = () => {
   const { addToCart } = useCart();
   const navigate = useNavigate();
 
-  useDocumentTitle(product ? product.name : "Product Details");
-
   useEffect(() => {
     const fetchProduct = async () => {
       try {
