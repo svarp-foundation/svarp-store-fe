@@ -7,9 +7,9 @@ export const navLinks = [
 
 export const footerLinks = {
   contactInfo: {
-    email: import.meta.env.VITE_CONTACT_EMAIL || "support@svarpbodywellness.org",
-    phone: import.meta.env.VITE_CONTACT_PHONE || "+91 12345 67890",
-    address: import.meta.env.VITE_CONTACT_ADDRESS || "123, Green Avenue, Eco City, India - 560001",
+    email: import.meta.env.VITE_CONTACT_EMAIL || "",
+    phone: import.meta.env.VITE_CONTACT_PHONE || "",
+    address: import.meta.env.VITE_CONTACT_ADDRESS || "",
   },
   quickLinks: [
     { name: "Home", path: "/" },
@@ -37,6 +37,6 @@ export const footerLinks = {
 export const socialLinks = {
   facebook: import.meta.env.VITE_SOCIAL_FACEBOOK || "#",
   instagram: import.meta.env.VITE_SOCIAL_INSTAGRAM || "#",
-  youtube: import.meta.env.VITE_SOCIAL_YOUTUBE || "#",
+  twitter: import.meta.env.VITE_SOCIAL_TWITTER || "#",
   linkedin: import.meta.env.VITE_SOCIAL_LINKEDIN || "#",
 };
