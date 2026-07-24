@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import Footer from "../components/Footer";
 import { Mail, Phone, MapPin, Send, Leaf } from "lucide-react";
 import { footerLinks } from "../data/navigation";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 const ContactPage = () => {
+  useDocumentTitle("Contact Us");
   const { email, phone, address } = footerLinks.contactInfo;
   const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
   const [submitted, setSubmitted] = useState(false);

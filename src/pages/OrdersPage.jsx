@@ -4,8 +4,10 @@ import { useAuth } from "../contexts/AuthContext";
 import { api } from "../utils/api";
 import Footer from "../components/Footer";
 import { Package, ChevronRight, Clock } from "lucide-react";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 const OrdersPage = () => {
+  useDocumentTitle("My Orders");
   const { user, loading: authLoading } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);

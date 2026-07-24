@@ -4,6 +4,7 @@ import { useCart } from "../contexts/CartContext";
 import { api } from "../utils/api";
 import Footer from "../components/Footer";
 import { ShoppingBag, ChevronLeft, Star, Minus, Plus, Tag, Check, Sparkles } from "lucide-react";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 export const formatVariantTitle = (v) => {
   if (!v) return "Standard Item";
@@ -71,6 +72,8 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
   const navigate = useNavigate();
+
+  useDocumentTitle(product ? product.name : "Product Details");
 
   useEffect(() => {
     const fetchProduct = async () => {

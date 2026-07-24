@@ -4,8 +4,10 @@ import ProductCard from "../components/utils/ProductCard";
 import { useProducts } from "../contexts/ProductContext";
 import Footer from "../components/Footer";
 import { SlidersHorizontal } from "lucide-react";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 const Products = () => {
+  useDocumentTitle("Shop Organic Products");
   const { products, loading, error } = useProducts();
   const location = useLocation();
   const [sortBy, setSortBy] = useState("default");

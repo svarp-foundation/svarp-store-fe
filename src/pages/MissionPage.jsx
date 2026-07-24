@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import {
   Target,
   Compass,
@@ -16,6 +17,8 @@ import {
 } from "lucide-react";
 
 const MissionPage = () => {
+  useDocumentTitle("Our Mission & Vision");
+
   const pillars = [
     {
       icon: <Leaf size={28} className="text-[#1e5e3a]" />,

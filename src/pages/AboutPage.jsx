@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import {
   Heart,
   Leaf,
@@ -15,6 +16,8 @@ import {
 } from "lucide-react";
 
 const AboutPage = () => {
+  useDocumentTitle("About Us");
+
   const values = [
     {
       icon: <Heart size={26} className="text-[#1e5e3a]" />,

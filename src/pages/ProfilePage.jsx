@@ -3,8 +3,10 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import { User, Package, MapPin, LogOut } from "lucide-react";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 const ProfilePage = () => {
+  useDocumentTitle("My Account");
   const { user, logout, loading } = useAuth();
   const navigate = useNavigate();
 

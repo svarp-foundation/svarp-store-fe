@@ -6,8 +6,10 @@ import { api } from "../utils/api";
 import { loadRazorpayScript } from "../utils/razorpay";
 import Footer from "../components/Footer";
 import { Trash2, Minus, Plus, ShoppingBag, ArrowRight } from "lucide-react";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 const CartPage = () => {
+  useDocumentTitle("Shopping Cart");
   const { cartItems, removeFromCart, updateQuantity, clearCart, cartTotal, cartCount } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();

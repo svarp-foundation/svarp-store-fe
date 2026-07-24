@@ -2,8 +2,11 @@ import React from "react";
 import { collections } from "../data/collections";
 import CollectionCard from "../components/utils/CollectionCard";
 import Footer from "../components/Footer";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 const CollectionsPage = () => {
+  useDocumentTitle("Categories");
+
   return (
     <>
       <div className="py-6 animate-fade-in min-h-[60vh]">
