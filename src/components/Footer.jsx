@@ -10,17 +10,17 @@ const Footer = () => {
 
       <div className="max-w-4xl mx-auto flex flex-col items-center gap-6 relative z-10">
         {/* Brand Header */}
-        <Link to="/" className="flex items-center gap-2 group">
+        <Link to="/" className="flex items-center gap-2.5 group">
           <img
             src="https://svarp.org/company/svarp-logo.webp"
             alt="SVARP Logo"
-            className="h-8 w-auto object-contain filter brightness-0 invert group-hover:scale-105 transition-transform"
+            className="h-11 w-auto object-contain filter brightness-0 invert group-hover:scale-105 transition-transform"
           />
           <div className="flex flex-col text-left">
-            <span className="font-serif text-xl tracking-wider font-bold leading-none text-white">
+            <span className="font-serif text-2xl tracking-wider font-bold leading-none text-white">
               SVARP
             </span>
-            <span className="text-[8px] uppercase tracking-[0.2em] text-accent font-semibold">
+            <span className="text-[10px] uppercase tracking-[0.22em] text-accent font-bold mt-0.5">
               Body Wellness
             </span>
           </div>

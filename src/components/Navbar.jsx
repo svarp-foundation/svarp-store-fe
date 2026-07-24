@@ -41,17 +41,17 @@ const Navbar = () => {
   return (
     <>
       <nav id="main-nav" className="flex justify-between items-center py-2.5 border-b border-[#1e5e3a]/10 mb-3 animate-fade-in relative z-100 bg-white/40 backdrop-blur-md px-4 rounded-3xl mt-2 border border-white/20">
-        <Link to="/" className="flex items-center gap-2 group relative z-110">
+        <Link to="/" className="flex items-center gap-2.5 group relative z-110">
           <img 
             src="https://svarp.org/company/svarp-logo.webp" 
             alt="SVARP Logo" 
-            className="h-8 md:h-9 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
+            className="h-11 md:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
           />
           <div className="flex flex-col">
-            <span className="font-serif text-[1.2rem] md:text-[1.4rem] tracking-wider font-bold leading-none text-[#1e5e3a]">
+            <span className="font-serif text-[1.6rem] md:text-[1.85rem] tracking-wider font-bold leading-none text-[#1e5e3a]">
               SVARP
             </span>
-            <span className="text-[7px] md:text-[8px] uppercase tracking-[0.2em] font-sans text-primary/60 font-semibold">
+            <span className="text-[9px] md:text-[10px] uppercase tracking-[0.22em] font-sans text-primary/70 font-bold mt-0.5">
               Body Wellness
             </span>
           </div>
