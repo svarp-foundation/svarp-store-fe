@@ -4,7 +4,8 @@ import { useCart } from "../contexts/CartContext";
 import { api } from "../utils/api";
 import Footer from "../components/Footer";
 import { ShoppingBag, ChevronLeft, Star, Minus, Plus, Tag, Check, Sparkles } from "lucide-react";
-import { useDocumentTitle } from "../hooks/useDocumentTitle";
+import SEOHead from "../components/utils/SEOHead";
+import ShareBar from "../components/utils/ShareBar";
 
 export const formatVariantTitle = (v) => {
   if (!v) return "Standard Item";
@@ -265,8 +266,39 @@ const ProductDetail = () => {
   const currentPrice = selectedVariant ? selectedVariant.price : product.price;
   const currentStock = selectedVariant && selectedVariant.stock !== undefined ? selectedVariant.stock : product.stock_quantity;
 
+  const productSchema = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": product.name,
+    "image": [imageUrl],
+    "description": product.description || `Buy ${product.name} online at SVARP Body Wellness. 100% certified natural and organic.`,
+    "sku": selectedVariant?.sku || product.sku || `SVARP-${product.id}`,
+    "brand": {
+      "@type": "Brand",
+      "name": "SVARP Body Wellness"
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": window.location.href,
+      "priceCurrency": "INR",
+      "price": currentPrice || product.price,
+      "availability": (currentStock > 0 || currentStock === null) ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      "seller": {
+        "@type": "Organization",
+        "name": "SVARP Body Wellness"
+      }
+    }
+  };
+
   return (
     <>
+      <SEOHead
+        title={product.name}
+        description={product.description || `Buy ${product.name} online at SVARP Body Wellness. Certified natural & organic.`}
+        ogImage={imageUrl}
+        ogType="product"
+        schemaJson={productSchema}
+      />
       <div className="py-3">
         <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-sm text-primary/60 hover:text-accent mb-4 transition-colors">
           <ChevronLeft size={16} /> Back
@@ -474,6 +506,9 @@ const ProductDetail = () => {
             >
               <ShoppingBag size={18} /> Add to Cart — ₹{(typeof currentPrice === "number" ? currentPrice : 0) * quantity}
             </button>
+
+            {/* SMO Social Share Bar */}
+            <ShareBar title={product.name} price={currentPrice} image={imageUrl} />
 
             {/* Notes */}
             {product.notes && (

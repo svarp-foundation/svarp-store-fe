@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
-import { useDocumentTitle } from "../hooks/useDocumentTitle";
+import SEOHead from "../components/utils/SEOHead";
 import {
   Target,
   Compass,
@@ -67,6 +67,10 @@ const MissionPage = () => {
 
   return (
     <>
+      <SEOHead
+        title="Our Mission & Vision"
+        description="Discover SVARP's mission to bridge 100% certified organic nutrition, workplace safety, urban agriculture setups, and carbon reduction."
+      />
       <div className="py-4 animate-fade-in min-h-[60vh]">
         {/* Mission Hero */}
         <div className="relative rounded-3xl bg-gradient-to-br from-[#faf9f5] via-[#f4f7f2] to-[#e9f2e7] p-8 md:p-12 border border-white/60 mb-8 overflow-hidden text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm">

@@ -4,14 +4,34 @@ import ProductCard from "../components/utils/ProductCard";
 import { useProducts } from "../contexts/ProductContext";
 import Footer from "../components/Footer";
 import { SlidersHorizontal } from "lucide-react";
-import { useDocumentTitle } from "../hooks/useDocumentTitle";
+import SEOHead from "../components/utils/SEOHead";
 
 const Products = () => {
-  useDocumentTitle("Shop Organic Products");
   const { products, loading, error } = useProducts();
   const location = useLocation();
   const [sortBy, setSortBy] = useState("default");
   const [showFilters, setShowFilters] = useState(false);
+
+  const siteUrl = typeof window !== "undefined" ? window.location.origin : (import.meta.env.VITE_SITE_URL || "https://bodywellness.svarp.org");
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": `${siteUrl}/`
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Shop Products",
+        "item": `${siteUrl}/shop`
+      }
+    ]
+  };
 
   const queryParams = useMemo(() => {
     const params = new URLSearchParams(location.search);
@@ -46,6 +66,10 @@ const Products = () => {
           return cat.includes("food") || name.includes("turmeric") || name.includes("nuts") || name.includes("snack");
         } else if (queryParams.category === "oils") {
           return cat.includes("oil") || name.includes("oil");
+        } else if (queryParams.category === "clothing") {
+          return cat.includes("clothing") || cat.includes("apparel") || name.includes("cotton") || name.includes("hemp") || name.includes("shirt");
+        } else if (queryParams.category === "jewellery" || queryParams.category === "jewelry") {
+          return cat.includes("jewel") || name.includes("brass") || name.includes("pendant") || name.includes("ring") || name.includes("necklace");
         } else if (queryParams.category === "farming") {
           return cat.includes("farming") || name.includes("hydroponic") || name.includes("kit");
         } else if (queryParams.category === "wellness") {
@@ -81,6 +105,11 @@ const Products = () => {
 
   return (
     <>
+      <SEOHead
+        title={queryParams.category ? `${queryParams.category.toUpperCase()} Products` : "Shop Organic Products"}
+        description="Browse SVARP Body Wellness catalog of 100% certified organic products, cold-pressed oils, herbal supplements, and urban farming setups."
+        schemaJson={breadcrumbSchema}
+      />
       <div className="py-6 animate-fade-in min-h-[60vh] relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-start mb-8 gap-4">
           <div>

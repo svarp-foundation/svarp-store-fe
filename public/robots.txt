@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Exclude private user routes from search engine indexing
+Disallow: /cart
+Disallow: /orders
+Disallow: /order/
+Disallow: /profile
+Disallow: /login
+Disallow: /signup
+
+# Sitemap Location
+Sitemap: https://bodywellness.svarp.org/sitemap.xml
