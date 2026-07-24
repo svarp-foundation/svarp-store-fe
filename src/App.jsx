@@ -16,10 +16,21 @@ import AboutPage from "./pages/AboutPage";
 import MissionPage from "./pages/MissionPage";
 import ContactPage from "./pages/ContactPage";
 
+// Admin Portal Components
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminLayout from "./pages/admin/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminProducts from "./pages/admin/AdminProducts";
+import AdminOrders from "./pages/admin/AdminOrders";
+import AdminUsers from "./pages/admin/AdminUsers";
+
 function App() {
   const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith("/admin");
 
   useEffect(() => {
+    if (isAdminRoute) return;
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -34,12 +45,28 @@ function App() {
     requestAnimationFrame(raf);
 
     return () => lenis.destroy();
-  }, []);
+  }, [isAdminRoute]);
 
   // Scroll to top on route change
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
+
+  if (isAdminRoute) {
+    return (
+      <Routes>
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="products" element={<AdminProducts />} />
+          <Route path="orders" element={<AdminOrders />} />
+          <Route path="users" element={<AdminUsers />} />
+          <Route path="*" element={<Navigate to="/admin" replace />} />
+        </Route>
+        <Route path="*" element={<Navigate to="/admin" replace />} />
+      </Routes>
+    );
+  }
 
   return (
     <div className="w-full px-3 md:px-6 lg:px-8 relative overflow-hidden">

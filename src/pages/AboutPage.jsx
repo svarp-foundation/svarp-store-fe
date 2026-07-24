@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import SEOHead from "../components/utils/SEOHead";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import {
   Heart,
   Leaf,
