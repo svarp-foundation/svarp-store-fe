@@ -46,7 +46,7 @@ export default function SEOHead({
     setMetaTag("name", "twitter:description", description);
     setMetaTag("name", "twitter:image", ogImage);
 
-    // 5. Canonical URL Link
+    // 5. Canonical URL & Favicon Links
     let canonicalElement = document.querySelector('link[rel="canonical"]');
     if (!canonicalElement) {
       canonicalElement = document.createElement("link");
@@ -54,6 +54,15 @@ export default function SEOHead({
       document.head.appendChild(canonicalElement);
     }
     canonicalElement.setAttribute("href", canonicalUrl || window.location.href);
+
+    let iconElement = document.querySelector('link[rel="icon"]');
+    if (!iconElement) {
+      iconElement = document.createElement("link");
+      iconElement.setAttribute("rel", "icon");
+      document.head.appendChild(iconElement);
+    }
+    iconElement.setAttribute("type", "image/webp");
+    iconElement.setAttribute("href", "https://svarp.org/company/svarp-logo.webp");
 
     // 6. Structured Data (Schema.org JSON-LD)
     let jsonLdElement = document.getElementById("json-ld-schema");
