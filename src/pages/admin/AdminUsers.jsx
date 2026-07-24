@@ -42,7 +42,7 @@ const AdminUsers = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-200/80 gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900 tracking-wide">Customer Directory</h1>
+          <h1 className="text-2xl font-extrabold text-[#1f3b45] tracking-wide">Customer Directory</h1>
           <p className="text-xs text-slate-500 mt-0.5">
             Registered customer accounts from Central User Portal (`portal-user`)
           </p>
@@ -93,7 +93,7 @@ const AdminUsers = () => {
                     <tr key={u.user_id || u.id} className="hover:bg-slate-50/80 transition-colors">
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-full bg-emerald-50 text-brand-primary font-bold text-xs flex items-center justify-center border border-emerald-100 flex-shrink-0 shadow-xs">
+                          <div className="w-9 h-9 rounded-full bg-[#1f3b45]/10 text-[#1f3b45] font-bold text-xs flex items-center justify-center border border-[#1f3b45]/20 flex-shrink-0 shadow-xs">
                             {initials}
                           </div>
                           <div>

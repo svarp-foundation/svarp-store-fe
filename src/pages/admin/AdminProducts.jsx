@@ -151,14 +151,14 @@ const AdminProducts = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-200/80 gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900 tracking-wide">Product Management</h1>
+          <h1 className="text-2xl font-extrabold text-[#1f3b45] tracking-wide">Product Management</h1>
           <p className="text-xs text-slate-500 mt-0.5">
             Manage inventory items, pricing, images, and stock availability
           </p>
         </div>
         <button
           onClick={handleOpenAdd}
-          className="inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-md cursor-pointer"
+          className="inline-flex items-center justify-center gap-2 bg-[#1f3b45] hover:bg-[#162a31] text-white px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-md cursor-pointer"
         >
           <Plus size={16} /> Add New Product
         </button>

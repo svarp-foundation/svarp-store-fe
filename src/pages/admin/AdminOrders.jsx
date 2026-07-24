@@ -140,7 +140,7 @@ const AdminOrders = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-200/80 gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900 tracking-wide">Order Lifecycle Management</h1>
+          <h1 className="text-2xl font-extrabold text-[#1f3b45] tracking-wide">Order Lifecycle Management</h1>
           <p className="text-xs text-slate-500 mt-0.5">
             Monitor, view details, fulfill, and update order statuses across all customer purchases
           </p>
@@ -187,7 +187,7 @@ const AdminOrders = () => {
               onClick={() => setStatusFilter(st)}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold capitalize transition-all whitespace-nowrap cursor-pointer ${
                 statusFilter === st
-                  ? "bg-brand-primary text-white shadow-sm"
+                  ? "bg-[#1f3b45] text-white shadow-sm"
                   : "bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900"
               }`}
             >
@@ -201,7 +201,7 @@ const AdminOrders = () => {
       <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
         {loading ? (
           <div className="p-12 text-center text-slate-400 text-xs font-semibold flex items-center justify-center gap-2">
-            <RefreshCw size={16} className="animate-spin text-brand-primary" />
+            <RefreshCw size={16} className="animate-spin text-[#1f3b45]" />
             Loading order history...
           </div>
         ) : filteredOrders.length === 0 ? (
@@ -231,7 +231,7 @@ const AdminOrders = () => {
 
                   return (
                     <tr key={orderId} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-3 px-4 font-mono font-bold text-brand-primary">
+                      <td className="py-3 px-4 font-mono font-bold text-[#1f3b45]">
                         <button
                           onClick={() => fetchOrderDetails(o)}
                           className="hover:underline text-left cursor-pointer"
@@ -264,7 +264,7 @@ const AdminOrders = () => {
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() => fetchOrderDetails(o)}
-                            className="px-3 py-1.5 bg-brand-primary/10 hover:bg-brand-primary/20 text-brand-primary font-bold text-xs rounded-lg border border-brand-primary/20 transition-all flex items-center gap-1.5 cursor-pointer"
+                            className="px-3 py-1.5 bg-[#1f3b45]/10 hover:bg-[#1f3b45]/20 text-[#1f3b45] font-bold text-xs rounded-lg border border-[#1f3b45]/20 transition-all flex items-center gap-1.5 cursor-pointer"
                             title="View Order Details"
                           >
                             <Eye size={14} />
@@ -465,7 +465,7 @@ const AdminOrders = () => {
                       const st = (viewingOrder.status || "pending").toLowerCase();
                       setTargetStatus(st === "pending" ? "processing" : st === "processing" ? "shipped" : "delivered");
                     }}
-                    className="px-4 py-2 bg-brand-primary text-white rounded-xl text-xs font-bold transition-all shadow-sm hover:bg-brand-primary/90 cursor-pointer"
+                    className="px-4 py-2 bg-[#1f3b45] text-white rounded-xl text-xs font-bold transition-all shadow-sm hover:bg-[#162a31] cursor-pointer"
                   >
                     Update Order Status
                   </button>
@@ -510,7 +510,7 @@ const AdminOrders = () => {
                 <select
                   value={targetStatus}
                   onChange={(e) => setTargetStatus(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-brand-primary font-bold"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-[#1f3b45] font-bold"
                 >
                   <option value="pending">Pending</option>
                   <option value="processing">Processing</option>
@@ -529,7 +529,7 @@ const AdminOrders = () => {
                   value={statusNotes}
                   onChange={(e) => setStatusNotes(e.target.value)}
                   placeholder="e.g. Shipped via BlueDart tracking #123456"
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-brand-primary font-medium"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-[#1f3b45] font-medium"
                 />
               </div>
 
@@ -544,7 +544,7 @@ const AdminOrders = () => {
                 <button
                   type="submit"
                   disabled={updating}
-                  className="px-5 py-2.5 bg-brand-primary hover:bg-brand-primary/90 text-white rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer"
+                  className="px-5 py-2.5 bg-[#1f3b45] hover:bg-[#162a31] text-white rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer"
                 >
                   {updating ? "Saving..." : "Confirm Transition"}
                 </button>
