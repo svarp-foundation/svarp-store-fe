@@ -41,15 +41,15 @@ const ProductCard = ({ product }) => {
   const finalPrice = displayPrice();
 
   return (
-    <div className="bg-white rounded-[24px] p-4 flex flex-col justify-between border border-[#1e5e3a]/5 hover:border-[#1e5e3a]/15 shadow-sm hover:shadow-xl transition-all duration-300 group relative overflow-hidden">
+    <div className="bg-white rounded-[20px] sm:rounded-[24px] p-3 sm:p-4 flex flex-col justify-between border border-[#1e5e3a]/5 hover:border-[#1e5e3a]/15 shadow-sm hover:shadow-xl transition-all duration-300 group relative overflow-hidden">
       {/* Discount Badge */}
-      <span className="absolute top-4 left-4 z-10 bg-[#e8efe9] text-[#1e5e3a] text-[10px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">
+      <span className="absolute top-2.5 left-2.5 sm:top-4 sm:left-4 z-10 bg-[#e8efe9] text-[#1e5e3a] text-[9px] sm:text-[10px] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full font-bold uppercase tracking-wider">
         20% OFF
       </span>
 
       <Link
         to={`/product/${product.id}`}
-        className="w-full aspect-square flex justify-center items-center relative overflow-hidden group-hover:scale-105 transition-transform duration-500 rounded-2xl bg-[#faf9f5]"
+        className="w-full aspect-square flex justify-center items-center relative overflow-hidden group-hover:scale-105 transition-transform duration-500 rounded-xl sm:rounded-2xl bg-[#faf9f5]"
       >
         <img
           src={imageUrl}
@@ -60,43 +60,43 @@ const ProductCard = ({ product }) => {
         <div className="absolute inset-0 bg-[#1e5e3a]/2 opacity-0 group-hover:opacity-100 transition-opacity"></div>
       </Link>
 
-      <div className="mt-4 flex flex-col gap-1.5 flex-grow">
+      <div className="mt-2.5 sm:mt-4 flex flex-col gap-1 sm:gap-1.5 flex-grow">
         {/* Rating Stars row */}
         <div className="flex items-center gap-1">
           <div className="flex text-amber-400">
             {[...Array(5)].map((_, i) => (
               <Star
                 key={i}
-                size={12}
+                size={10}
                 fill={i < Math.floor(rating) ? "currentColor" : "none"}
-                className="stroke-current"
+                className="stroke-current sm:w-3 sm:h-3"
               />
             ))}
           </div>
-          <span className="text-[10px] text-[#2d3a30]/50 font-bold">({reviewsCount})</span>
+          <span className="text-[9px] sm:text-[10px] text-[#2d3a30]/50 font-bold">({reviewsCount})</span>
         </div>
 
         {/* Product Title */}
         <Link to={`/product/${product.id}`} className="hover:text-accent transition-colors block">
-          <h3 className="text-sm font-serif font-bold text-primary capitalize line-clamp-2 leading-tight">
+          <h3 className="text-xs sm:text-sm font-serif font-bold text-primary capitalize line-clamp-2 leading-tight">
             {product.name}
           </h3>
         </Link>
 
         {/* Pricing Row */}
-        <div className="flex items-baseline gap-2 mt-1">
-          <span className="text-base font-bold text-primary">₹{finalPrice}</span>
-          <span className="text-xs text-[#2d3a30]/40 line-through">₹{originalPrice}</span>
-          <span className="text-[10px] text-[#1e5e3a] font-bold">20% OFF</span>
+        <div className="flex items-baseline gap-1.5 sm:gap-2 mt-0.5 sm:mt-1">
+          <span className="text-sm sm:text-base font-bold text-primary">₹{finalPrice}</span>
+          <span className="text-[10px] sm:text-xs text-[#2d3a30]/40 line-through">₹{originalPrice}</span>
+          <span className="text-[9px] sm:text-[10px] text-[#1e5e3a] font-bold">20% OFF</span>
         </div>
       </div>
 
       {/* Button Row */}
-      <div className="flex gap-2 w-full mt-4">
+      <div className="flex gap-2 w-full mt-2.5 sm:mt-4">
         {product.real_variants && product.real_variants.length > 0 ? (
           <Link
             to={`/product/${product.id}`}
-            className="flex-1 text-[11px] bg-[#1e5e3a] hover:bg-[#15462a] text-white py-2.5 flex items-center justify-center rounded-full uppercase tracking-wider font-bold transition-all duration-300 hover:shadow-lg hover:shadow-[#1e5e3a]/15"
+            className="flex-1 text-[10px] sm:text-[11px] bg-[#1e5e3a] hover:bg-[#15462a] text-white py-2 sm:py-2.5 flex items-center justify-center rounded-full uppercase tracking-wider font-bold transition-all duration-300 hover:shadow-lg hover:shadow-[#1e5e3a]/15"
           >
             Choose Option
           </Link>
@@ -106,9 +106,9 @@ const ProductCard = ({ product }) => {
               addToCart(product);
               navigate("/cart");
             }}
-            className="flex-1 text-[11px] bg-[#1e5e3a] hover:bg-[#15462a] text-white py-2.5 flex items-center justify-center rounded-full uppercase tracking-wider font-bold transition-all duration-300 hover:shadow-lg hover:shadow-[#1e5e3a]/15 gap-2"
+            className="flex-1 text-[10px] sm:text-[11px] bg-[#1e5e3a] hover:bg-[#15462a] text-white py-2 sm:py-2.5 flex items-center justify-center rounded-full uppercase tracking-wider font-bold transition-all duration-300 hover:shadow-lg hover:shadow-[#1e5e3a]/15 gap-1.5"
           >
-            <ShoppingCart size={13} />
+            <ShoppingCart size={12} className="sm:w-3.5 sm:h-3.5" />
             Add To Cart
           </Button>
         )}

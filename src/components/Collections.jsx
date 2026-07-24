@@ -12,7 +12,7 @@ const Collections = () => {
           Explore our wide range of natural and sustainable categories curated for you and your family.
         </p>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
         {collections.map((c) => (
           <CollectionCard key={c.id} collection={c} />
         ))}

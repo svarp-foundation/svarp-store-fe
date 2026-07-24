@@ -41,18 +41,18 @@ const HeroSection = () => {
         </div>
 
         {/* Dynamic Micro Feature badging */}
-        <div className="grid grid-cols-3 gap-6 mt-8 pt-8 border-t border-[#1e5e3a]/10 w-full">
-          <div className="flex items-center gap-2">
-            <ShieldCheck size={20} className="text-[#1e5e3a]" />
-            <span className="text-xs font-bold uppercase tracking-wider text-[#2d3a30]/75">100% Organic</span>
+        <div className="flex flex-wrap items-center justify-between gap-3 mt-6 pt-6 border-t border-[#1e5e3a]/10 w-full">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <ShieldCheck size={18} className="text-[#1e5e3a]" />
+            <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#2d3a30]/75">100% Organic</span>
           </div>
-          <div className="flex items-center gap-2">
-            <Sparkles size={20} className="text-accent" />
-            <span className="text-xs font-bold uppercase tracking-wider text-[#2d3a30]/75">Eco Friendly</span>
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <Sparkles size={18} className="text-accent" />
+            <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#2d3a30]/75">Eco Friendly</span>
           </div>
-          <div className="flex items-center gap-2">
-            <Truck size={20} className="text-[#1e5e3a]" />
-            <span className="text-xs font-bold uppercase tracking-wider text-[#2d3a30]/75">Fast Delivery</span>
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <Truck size={18} className="text-[#1e5e3a]" />
+            <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#2d3a30]/75">Fast Delivery</span>
           </div>
         </div>
       </div>
