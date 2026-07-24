@@ -59,7 +59,7 @@ body {
 * { scrollbar-width: thin; scrollbar-color: var(--primary) #f1f5f0; }
 
 h1, h2, h3, .brand { font-family: var(--font-serif); font-weight: 700; }
-button { cursor: pointer; border: none; background-color: transparent; font-family: inherit; }
+button { cursor: pointer; border: none; font-family: inherit; }
 
 /* Lenis Smooth Scroll */
 html.lenis, html.lenis body { height: auto; }

@@ -10,10 +10,6 @@ const HeroSection = () => {
 
       {/* Hero Left Content */}
       <div className="flex-1 flex flex-col gap-6 items-start text-left max-w-2xl relative z-10">
-        <div className="flex items-center gap-2 bg-[#1e5e3a]/10 text-[#1e5e3a] px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider">
-          <Leaf size={14} className="fill-[#1e5e3a]/10" />
-          Live Healthy, Live Natural
-        </div>
 
         <h1 className="text-[2.6rem] md:text-[4rem] leading-[1.1] text-[#1e5e3a] font-serif font-black">
           Sustainable Products <br />

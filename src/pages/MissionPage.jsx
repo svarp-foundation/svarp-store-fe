@@ -71,10 +71,6 @@ const MissionPage = () => {
         {/* Mission Hero */}
         <div className="relative rounded-3xl bg-gradient-to-br from-[#faf9f5] via-[#f4f7f2] to-[#e9f2e7] p-8 md:p-12 border border-white/60 mb-8 overflow-hidden text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm">
           <div className="flex-1 space-y-4">
-            <div className="inline-flex items-center gap-2 bg-[#1e5e3a]/10 text-[#1e5e3a] px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">
-              <Target size={14} />
-              Driven By Purpose
-            </div>
             <h1 className="font-serif text-[2.4rem] md:text-[3.4rem] font-black leading-tight text-[#1e5e3a]">
               Our Mission &amp; Vision <br />
               <span className="text-accent">For a Sustainable Future</span>

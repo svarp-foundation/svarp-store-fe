@@ -22,10 +22,6 @@ const Newsletter = () => {
         <Sparkles size={80} className="absolute -right-6 -top-6 text-accent/10 pointer-events-none" />
 
         <div className="flex-1 text-center md:text-left flex flex-col gap-2 relative z-10">
-          <div className="flex items-center justify-center md:justify-start gap-2 text-xs font-bold uppercase tracking-wider text-[#1e5e3a]">
-            <Leaf size={14} className="fill-[#1e5e3a]/10" />
-            Stay Healthy, Stay Updated!
-          </div>
           <h2 className="font-serif text-2xl md:text-3xl font-black text-primary leading-tight">
             Subscribe to get special offers, health tips and updates.
           </h2>
