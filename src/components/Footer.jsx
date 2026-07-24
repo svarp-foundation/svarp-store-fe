@@ -5,11 +5,11 @@ import { Mail, Phone, MapPin, Leaf } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#113622] text-white/80 pt-16 pb-10 px-6 md:px-12 rounded-3xl mt-12 mb-6 border border-white/10 animate-fade-in relative z-10 overflow-hidden">
+    <footer className="bg-[#113622] text-white/80 pt-8 pb-6 px-6 md:px-10 rounded-3xl mt-6 mb-3 border border-white/10 animate-fade-in relative z-10 overflow-hidden">
       {/* Decorative ambient glow */}
       <div className="absolute top-0 right-0 w-80 h-80 bg-accent/10 rounded-full blur-[100px] pointer-events-none"></div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 mb-16 relative z-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6 mb-8 relative z-10">
         {/* Brand Column */}
         <div className="lg:col-span-1 flex flex-col gap-6">
           <Link to="/" className="flex items-center gap-2 group">

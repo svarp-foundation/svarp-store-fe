@@ -155,10 +155,12 @@ const ProductDetail = () => {
     return ["/images/placeholder.webp"];
   }, [selectedVariant, product]);
 
-  // Reset active image index whenever selected variant or available image set changes
+  // Reset active image index whenever selected variant changes
   useEffect(() => {
     setActiveImageIndex(0);
-  }, [selectedVariant, activeImages]);
+  }, [selectedVariant?.id]);
+
+  const activeImagesKey = activeImages.join(",");
 
   // Auto-slide image gallery every 3 seconds when multiple images exist
   useEffect(() => {
@@ -169,7 +171,7 @@ const ProductDetail = () => {
     }, 3000);
 
     return () => clearInterval(timer);
-  }, [activeImages]);
+  }, [activeImagesKey]);
 
   const getSelectedAttrValue = (attrName) => {
     if (!selectedVariant) return "";
@@ -262,15 +264,15 @@ const ProductDetail = () => {
 
   return (
     <>
-      <div className="py-6 animate-fade-in">
-        <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-sm text-primary/60 hover:text-accent mb-8 transition-colors">
+      <div className="py-3">
+        <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-sm text-primary/60 hover:text-accent mb-4 transition-colors">
           <ChevronLeft size={16} /> Back
         </button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
           {/* Image */}
-          <div className="bg-white/30 backdrop-blur-md rounded-3xl p-8 flex flex-col items-center justify-center min-h-[400px] border border-white/20 relative">
-            <img key={imageUrl} src={imageUrl} alt={product.name} className="max-h-[400px] object-contain transition-all duration-500 animate-fade-in" />
+          <div className="bg-white/30 backdrop-blur-md rounded-3xl p-6 flex flex-col items-center justify-center min-h-[320px] border border-white/20 relative">
+            <img src={imageUrl} alt={product.name} className="max-h-[400px] object-contain transition-opacity duration-300" />
             {activeImages.length > 1 && (
               <div className="flex gap-2 mt-4 overflow-x-auto p-1 max-w-full">
                 {activeImages.map((img, idx) => (

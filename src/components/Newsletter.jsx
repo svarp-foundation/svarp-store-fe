@@ -15,8 +15,8 @@ const Newsletter = () => {
   };
 
   return (
-    <section className="py-8 animate-fade-in relative z-10">
-      <div className="bg-gradient-to-r from-[#e8efe9] via-[#f4f7f2] to-[#faf9f5] rounded-3xl p-8 md:p-12 border border-white/60 shadow-sm relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
+    <section className="py-4 animate-fade-in relative z-10">
+      <div className="bg-gradient-to-r from-[#e8efe9] via-[#f4f7f2] to-[#faf9f5] rounded-3xl p-6 md:p-8 border border-white/60 shadow-sm relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
         {/* Background micro leaf icons */}
         <Leaf size={120} className="absolute -left-10 -bottom-10 text-[#1e5e3a]/5 transform rotate-45 pointer-events-none" />
         <Sparkles size={80} className="absolute -right-6 -top-6 text-accent/10 pointer-events-none" />

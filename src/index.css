@@ -92,7 +92,7 @@ sup { font-size: 0.5em; margin-left: 1px; opacity: 0.8; font-weight: 400; }
   .gap-8, .gap-10, .gap-12, .gap-16 { gap: 1rem !important; }
   .mb-8, .mb-10, .mb-12, .mb-16 { margin-bottom: 1rem !important; }
   .mt-8, .mt-10, .mt-12, .mt-16 { margin-top: 1rem !important; }
-  .max-w-\[1400px\] { padding-left: 1rem !important; padding-right: 1rem !important; }
+
 }
 
 @media (max-width: 480px) {

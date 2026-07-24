@@ -2,7 +2,7 @@ export const navLinks = [
   { name: "Home", path: "/" },
   { name: "Shop", path: "/shop" },
   { name: "About Us", path: "/about" },
-  { name: "Our Mission", path: "/about" },
+  { name: "Our Mission", path: "/mission" },
 ];
 
 export const footerLinks = {
@@ -15,7 +15,7 @@ export const footerLinks = {
     { name: "Home", path: "/" },
     { name: "Shop", path: "/shop" },
     { name: "About Us", path: "/about" },
-    { name: "Our Mission", path: "/about" },
+    { name: "Our Mission", path: "/mission" },
   ],
   categories: [
     { name: "Health & Wellness", path: "/shop?category=Wellness" },

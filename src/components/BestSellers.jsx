@@ -24,8 +24,8 @@ const BestSellers = () => {
   }
 
   return (
-    <section className="py-12 animate-fade-in relative z-10">
-      <div className="flex justify-between items-end mb-8">
+    <section className="py-4 animate-fade-in relative z-10">
+      <div className="flex justify-between items-end mb-4">
         <div>
           <h2 className="font-serif text-[2.2rem] md:text-[2.6rem] font-black text-primary leading-none">Best Sellers</h2>
           <div className="w-12 h-1 bg-[#1e5e3a]/30 rounded-full mt-2"></div>

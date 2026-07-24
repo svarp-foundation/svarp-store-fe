@@ -3,7 +3,7 @@ import { features } from "../data/features";
 
 const Features = () => {
   return (
-    <section className="py-8 md:py-12 animate-fade-in relative z-10">
+    <section className="py-4 animate-fade-in relative z-10">
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6 bg-white/40 backdrop-blur-md p-6 rounded-3xl border border-white/40 shadow-sm">
         {features.map((feature, index) => (
           <div

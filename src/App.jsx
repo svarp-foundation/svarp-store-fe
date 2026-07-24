@@ -13,6 +13,7 @@ import CartPage from "./pages/CartPage";
 import OrdersPage from "./pages/OrdersPage";
 import OrderDetailPage from "./pages/OrderDetailPage";
 import AboutPage from "./pages/AboutPage";
+import MissionPage from "./pages/MissionPage";
 import ContactPage from "./pages/ContactPage";
 
 function App() {
@@ -41,7 +42,7 @@ function App() {
   }, [location.pathname]);
 
   return (
-    <div className="max-w-[1400px] mx-auto px-4 md:px-8 relative overflow-hidden">
+    <div className="w-full px-3 md:px-6 lg:px-8 relative overflow-hidden">
       <div className="fixed top-0 left-0 w-full h-full -z-10 opacity-15 pointer-events-none bg-[radial-gradient(circle_at_10%_20%,var(--accent)_0%,transparent_40%),radial-gradient(circle_at_90%_80%,var(--accent)_0%,transparent_40%)] blur-[80px]"></div>
       <Navbar />
       <main>
@@ -53,6 +54,7 @@ function App() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/profile/*" element={<ProfilePage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/mission" element={<MissionPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/product/:productId" element={<ProductDetail />} />
           <Route path="/cart" element={<CartPage />} />

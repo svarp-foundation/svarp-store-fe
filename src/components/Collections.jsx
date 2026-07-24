@@ -4,8 +4,8 @@ import CollectionCard from "./utils/CollectionCard";
 
 const Collections = () => {
   return (
-    <section className="py-12 animate-fade-in relative z-10">
-      <div className="flex flex-col items-center mb-10 text-center">
+    <section className="py-4 animate-fade-in relative z-10">
+      <div className="flex flex-col items-center mb-5 text-center">
         <h2 className="font-serif text-[2.2rem] md:text-[2.6rem] font-black text-primary">Shop by Categories</h2>
         <div className="w-12 h-1 bg-accent/40 rounded-full mt-2 mb-3"></div>
         <p className="text-[#2d3a30]/65 text-sm max-w-xl">

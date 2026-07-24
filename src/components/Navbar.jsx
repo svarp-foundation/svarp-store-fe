@@ -40,7 +40,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav id="main-nav" className="flex justify-between items-center py-5 border-b border-[#1e5e3a]/10 mb-8 animate-fade-in relative z-100 bg-white/40 backdrop-blur-md px-4 rounded-3xl mt-4 border border-white/20">
+      <nav id="main-nav" className="flex justify-between items-center py-2.5 border-b border-[#1e5e3a]/10 mb-3 animate-fade-in relative z-100 bg-white/40 backdrop-blur-md px-4 rounded-3xl mt-2 border border-white/20">
         <Link to="/" className="flex items-center gap-2 group relative z-110">
           <img 
             src="https://svarp.org/company/svarp-logo.webp" 
