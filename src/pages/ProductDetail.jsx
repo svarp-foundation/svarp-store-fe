@@ -67,14 +67,10 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedVariant, setSelectedVariant] = useState(null);
-  const [activeImageOverride, setActiveImageOverride] = useState(null);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setActiveImageOverride(null);
-  }, [selectedVariant]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -158,6 +154,22 @@ const ProductDetail = () => {
     }
     return ["/images/placeholder.webp"];
   }, [selectedVariant, product]);
+
+  // Reset active image index whenever selected variant or available image set changes
+  useEffect(() => {
+    setActiveImageIndex(0);
+  }, [selectedVariant, activeImages]);
+
+  // Auto-slide image gallery every 3 seconds when multiple images exist
+  useEffect(() => {
+    if (!activeImages || activeImages.length <= 1) return;
+
+    const timer = setInterval(() => {
+      setActiveImageIndex((prevIndex) => (prevIndex + 1) % activeImages.length);
+    }, 3000);
+
+    return () => clearInterval(timer);
+  }, [activeImages]);
 
   const getSelectedAttrValue = (attrName) => {
     if (!selectedVariant) return "";
@@ -244,7 +256,7 @@ const ProductDetail = () => {
     );
   }
 
-  const imageUrl = activeImageOverride || activeImages[0] || "/images/placeholder.webp";
+  const imageUrl = (activeImages && activeImages[activeImageIndex]) || activeImages[0] || "/images/placeholder.webp";
   const currentPrice = selectedVariant ? selectedVariant.price : product.price;
   const currentStock = selectedVariant && selectedVariant.stock !== undefined ? selectedVariant.stock : product.stock_quantity;
 
@@ -258,7 +270,7 @@ const ProductDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
           {/* Image */}
           <div className="bg-white/30 backdrop-blur-md rounded-3xl p-8 flex flex-col items-center justify-center min-h-[400px] border border-white/20 relative">
-            <img src={imageUrl} alt={product.name} className="max-h-[400px] object-contain transition-all duration-300" />
+            <img key={imageUrl} src={imageUrl} alt={product.name} className="max-h-[400px] object-contain transition-all duration-500 animate-fade-in" />
             {activeImages.length > 1 && (
               <div className="flex gap-2 mt-4 overflow-x-auto p-1 max-w-full">
                 {activeImages.map((img, idx) => (
@@ -266,8 +278,8 @@ const ProductDetail = () => {
                     key={idx}
                     src={img}
                     alt={`Thumb ${idx}`}
-                    className={`w-14 h-14 rounded-xl object-cover border cursor-pointer transition-all ${imageUrl === img ? "border-accent ring-2 ring-accent/30 scale-105" : "border-white/40 hover:opacity-80"}`}
-                    onClick={() => setActiveImageOverride(img)}
+                    className={`w-14 h-14 rounded-xl object-cover border cursor-pointer transition-all ${idx === activeImageIndex ? "border-accent ring-2 ring-accent/30 scale-105" : "border-white/40 opacity-70 hover:opacity-100"}`}
+                    onClick={() => setActiveImageIndex(idx)}
                   />
                 ))}
               </div>
