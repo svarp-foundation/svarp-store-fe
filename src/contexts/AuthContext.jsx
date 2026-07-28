@@ -88,14 +88,64 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const signup = async (email, password, fullName) => {
+  const sendOtp = async (email, purpose = "login") => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/otp/send`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, purpose }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return { success: true, data };
+      } else {
+        const errorData = await response.json();
+        return { success: false, error: formatError(errorData, "Failed to send OTP code") };
+      }
+    } catch (err) {
+      console.error("OTP send failed:", err);
+      return { success: false, error: "Failed to connect to email portal" };
+    }
+  };
+
+  const verifyOtp = async (email, otpCode, purpose = "login") => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/otp/verify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp_code: otpCode, purpose }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.access_token) {
+          localStorage.setItem("token", data.access_token);
+          if (data.user) {
+            setUser(data.user);
+          } else {
+            await fetchUser(data.access_token);
+          }
+        }
+        return { success: true, data };
+      } else {
+        const errorData = await response.json();
+        return { success: false, error: formatError(errorData, "Invalid or expired OTP code") };
+      }
+    } catch (err) {
+      console.error("OTP verify failed:", err);
+      return { success: false, error: "Failed to connect to email portal" };
+    }
+  };
+
+  const signup = async (email, password, fullName, otpCode) => {
     try {
       const response = await fetch(
         `${API_BASE_URL}/api/auth/signup`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password, full_name: fullName }),
+          body: JSON.stringify({ email, password, full_name: fullName, otp_code: otpCode }),
         },
       );
 
@@ -125,7 +175,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, signup, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, sendOtp, verifyOtp, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );
