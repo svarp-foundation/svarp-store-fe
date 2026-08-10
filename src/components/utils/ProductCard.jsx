@@ -27,9 +27,10 @@ const ProductCard = ({ product }) => {
   const imageUrl = getProductImage(product);
 
   // Mock pricing and reviews for premium mockup fidelity matching the user's design image
-  const originalPrice = product.price ? Math.round(product.price * 1.25) : 249;
-  const rating = product.rating || (4 + Math.random() * 0.9).toFixed(1);
-  const reviewsCount = product.reviews_count || Math.floor(30 + Math.random() * 150);
+  const originalPrice = product.mrp || product.base_price || product.oldPrice;
+  const discountLabel = product.discount || (originalPrice && product.price && originalPrice > product.price ? `${Math.round((1 - product.price / originalPrice) * 100)}% OFF` : null);
+  const rating = product.rating || 4.8;
+  const reviewsCount = product.reviews_count || 42;
 
   const displayPrice = () => {
     if (product.real_variants && product.real_variants.length > 0) {
@@ -43,9 +44,11 @@ const ProductCard = ({ product }) => {
   return (
     <div className="bg-white rounded-[20px] sm:rounded-[24px] p-3 sm:p-4 flex flex-col justify-between border border-[#1e5e3a]/5 hover:border-[#1e5e3a]/15 shadow-sm hover:shadow-xl transition-all duration-300 group relative overflow-hidden">
       {/* Discount Badge */}
-      <span className="absolute top-2.5 left-2.5 sm:top-4 sm:left-4 z-10 bg-[#e8efe9] text-[#1e5e3a] text-[9px] sm:text-[10px] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full font-bold uppercase tracking-wider">
-        20% OFF
-      </span>
+      {discountLabel && (
+        <span className="absolute top-2.5 left-2.5 sm:top-4 sm:left-4 z-10 bg-[#e8efe9] text-[#1e5e3a] text-[9px] sm:text-[10px] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full font-bold uppercase tracking-wider">
+          {discountLabel}
+        </span>
+      )}
 
       <Link
         to={`/product/${product.id}`}
@@ -86,8 +89,12 @@ const ProductCard = ({ product }) => {
         {/* Pricing Row */}
         <div className="flex items-baseline gap-1.5 sm:gap-2 mt-0.5 sm:mt-1">
           <span className="text-sm sm:text-base font-bold text-primary">₹{finalPrice}</span>
-          <span className="text-[10px] sm:text-xs text-[#2d3a30]/40 line-through">₹{originalPrice}</span>
-          <span className="text-[9px] sm:text-[10px] text-[#1e5e3a] font-bold">20% OFF</span>
+          {originalPrice && originalPrice > finalPrice && (
+            <span className="text-[10px] sm:text-xs text-[#2d3a30]/40 line-through">₹{originalPrice}</span>
+          )}
+          {discountLabel && (
+            <span className="text-[9px] sm:text-[10px] text-[#1e5e3a] font-bold">{discountLabel}</span>
+          )}
         </div>
       </div>
 

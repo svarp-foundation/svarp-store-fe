@@ -340,10 +340,20 @@ const ProductDetail = () => {
 
             <h1 className="font-serif text-[2rem] md:text-[2.5rem] leading-tight capitalize">{product.name}</h1>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 flex-wrap">
               <span className="text-2xl font-bold text-accent">
                 {typeof currentPrice === "number" ? `₹${currentPrice}` : currentPrice}
               </span>
+              {(selectedVariant?.oldPrice || (selectedVariant?.mrp && selectedVariant?.mrp > selectedVariant?.price ? `₹${selectedVariant.mrp}` : null) || product.oldPrice) && (
+                <span className="text-base line-through text-primary/40 font-medium">
+                  {selectedVariant?.oldPrice || (selectedVariant?.mrp ? `₹${selectedVariant.mrp}` : product.oldPrice)}
+                </span>
+              )}
+              {(selectedVariant?.discount || product.discount) && (
+                <span className="text-[10px] font-bold bg-[#e8efe9] text-[#1e5e3a] px-2.5 py-1 rounded-full uppercase tracking-wider">
+                  {selectedVariant?.discount || product.discount}
+                </span>
+              )}
               {currentStock !== null && currentStock !== undefined && (
                 <span className={`text-xs px-2.5 py-1 rounded-full font-bold ${currentStock > 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
                   {currentStock > 0 ? `${currentStock} in stock` : "Out of stock"}
