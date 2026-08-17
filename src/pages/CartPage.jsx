@@ -24,6 +24,63 @@ const CartPage = () => {
     postal_code: "",
   });
 
+  // Coupon promo code states
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [applyingCoupon, setApplyingCoupon] = useState(false);
+  const [couponError, setCouponError] = useState("");
+  const [couponSuccess, setCouponSuccess] = useState("");
+
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) return;
+    setApplyingCoupon(true);
+    setCouponError("");
+    setCouponSuccess("");
+    try {
+      const res = await api.post("/api/coupons/validate", {
+        code: couponCode,
+        subtotal: cartTotal,
+        items: cartItems.map(item => {
+          const priceStr = String(item.price).replace(/[^0-9.]/g, "");
+          const price = parseFloat(priceStr) || 0;
+          return {
+            id: String(item.id),
+            price: price,
+            quantity: item.quantity
+          };
+        })
+      });
+      
+      if (res.ok) {
+        const data = await res.json();
+        if (data.valid) {
+          setAppliedCoupon({
+            id: data.coupon_id,
+            code: couponCode.toUpperCase(),
+            discount_amount: data.discount_amount
+          });
+          setCouponSuccess(`Coupon '${couponCode.toUpperCase()}' applied successfully!`);
+        } else {
+          setCouponError(data.message || "Invalid coupon code");
+        }
+      } else {
+        const data = await res.json();
+        setCouponError(data.detail || "Invalid coupon code");
+      }
+    } catch (err) {
+      setCouponError("Failed to validate coupon");
+    } finally {
+      setApplyingCoupon(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponCode("");
+    setCouponSuccess("");
+    setCouponError("");
+  };
+
   useEffect(() => {
     if (user) {
       fetchAddress();
@@ -73,13 +130,20 @@ const CartPage = () => {
 
     setCheckoutLoading(true);
     try {
+      // Calculate discounted totals
+      const discount = appliedCoupon?.discount_amount || 0;
+      const discountedTotal = Math.max(0, cartTotal - discount);
+      const shippingCost = cartTotal >= 999 ? 0 : 99;
+      const finalTotal = discountedTotal + shippingCost;
+      const amountInPaise = Math.round(finalTotal * 100);
+
       // Create payment order via BFF
-      const amountInPaise = Math.round(cartTotal * 100);
       const res = await api.post("/api/payments/create-order", {
         amount: amountInPaise,
         currency: "INR",
         metadata: {
           items: cartItems.map((i) => ({ id: i.id, name: i.name, qty: i.quantity })),
+          coupon_code: appliedCoupon?.code || null,
         },
       });
 
@@ -131,10 +195,12 @@ const CartPage = () => {
                   image: item.image || null,
                 };
               }),
-              total_amount: cartTotal,
+              total_amount: finalTotal,
               currency: "INR",
               payment_id: response.razorpay_payment_id,
               payment_order_id: response.razorpay_order_id,
+              coupon_code: appliedCoupon?.code || null,
+              coupon_id: appliedCoupon?.id || null,
               shipping_address: {
                 name: address.full_name,
                 phone: address.phone_number,
@@ -310,10 +376,53 @@ const CartPage = () => {
             <h2 className="font-serif text-xl font-bold mb-6">Order Summary</h2>
             <div className="flex flex-col gap-3 text-sm">
               <div className="flex justify-between"><span className="text-primary/60">Subtotal</span><span className="font-bold">&#x20b9;{cartTotal.toFixed(0)}</span></div>
+              {appliedCoupon && (
+                <div className="flex justify-between text-green-600 font-medium">
+                  <span>Discount ({appliedCoupon.code})</span>
+                  <span>-&#x20b9;{appliedCoupon.discount_amount.toFixed(0)}</span>
+                </div>
+              )}
               <div className="flex justify-between"><span className="text-primary/60">Shipping</span><span className="text-green-600 font-medium">{cartTotal >= 999 ? "Free" : "₹99"}</span></div>
+              
+              {/* Promo Code input */}
+              {user && (
+                <div className="border-t border-primary/5 pt-4 mt-1 flex flex-col gap-2">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Promo Code"
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value)}
+                      disabled={!!appliedCoupon}
+                      className="bg-white/60 border border-primary/10 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#1e5e3a] uppercase flex-1"
+                    />
+                    {appliedCoupon ? (
+                      <button
+                        onClick={handleRemoveCoupon}
+                        className="bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                      >
+                        Remove
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleApplyCoupon}
+                        disabled={applyingCoupon || !couponCode.trim()}
+                        className="bg-[#1e5e3a] hover:bg-[#15462a] text-white px-4 py-2 rounded-xl text-xs font-bold transition-all disabled:opacity-50 cursor-pointer"
+                      >
+                        {applyingCoupon ? "..." : "Apply"}
+                      </button>
+                    )}
+                  </div>
+                  {couponError && <p className="text-[10px] text-red-500 font-bold">{couponError}</p>}
+                  {couponSuccess && <p className="text-[10px] text-green-600 font-bold">{couponSuccess}</p>}
+                </div>
+              )}
+
               <div className="border-t border-primary/5 pt-3 flex justify-between text-lg">
                 <span className="font-bold">Total</span>
-                <span className="font-bold text-accent">&#x20b9;{(cartTotal + (cartTotal >= 999 ? 0 : 99)).toFixed(0)}</span>
+                <span className="font-bold text-accent">
+                  &#x20b9;{(Math.max(0, cartTotal - (appliedCoupon?.discount_amount || 0)) + (cartTotal >= 999 ? 0 : 99)).toFixed(0)}
+                </span>
               </div>
             </div>
             <button
