@@ -1,7 +1,82 @@
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { Leaf, ArrowRight, ShieldCheck, Sparkles, Truck } from "lucide-react";
+import { Leaf, ArrowRight, ShieldCheck, Sparkles, Truck, RefreshCw } from "lucide-react";
+import { useProducts } from "../contexts/ProductContext";
+
+const getProductImage = (prod) => {
+  if (!prod) return null;
+  if (prod.image) return prod.image;
+  if (prod.images && Array.isArray(prod.images) && prod.images.length > 0 && prod.images[0]) {
+    return prod.images[0];
+  }
+  const variants = prod.real_variants || prod.variants || [];
+  for (const v of variants) {
+    if (v.images && Array.isArray(v.images) && v.images.length > 0 && v.images[0]) {
+      return v.images[0];
+    }
+    if (v.image) {
+      return v.image;
+    }
+  }
+  return null;
+};
+
+const getProductPrice = (prod) => {
+  if (!prod) return 199;
+  if (prod.real_variants && prod.real_variants.length > 0) {
+    return Math.min(...prod.real_variants.map((v) => v.price));
+  }
+  return typeof prod.price === "number" ? prod.price : (prod.base_price || 199);
+};
 
 const HeroSection = () => {
+  const { products, loading } = useProducts();
+  const [randomProducts, setRandomProducts] = useState([]);
+
+  // Function to pick 2 random products from available products array
+  const pickRandomProducts = useCallback(() => {
+    if (!products || products.length === 0) return;
+    const shuffled = [...products].sort(() => 0.5 - Math.random());
+    setRandomProducts(shuffled.slice(0, 2));
+  }, [products]);
+
+  useEffect(() => {
+    pickRandomProducts();
+  }, [products, pickRandomProducts]);
+
+  // Compute lowest starting price dynamically
+  const lowestPrice = useMemo(() => {
+    if (!products || products.length === 0) return 199;
+    const prices = products.map((p) => getProductPrice(p)).filter((val) => typeof val === "number" && !isNaN(val));
+    return prices.length > 0 ? Math.min(...prices) : 199;
+  }, [products]);
+
+  // Dynamic product count text
+  const totalSolutionsText = useMemo(() => {
+    if (!products || products.length === 0) return "Over 50+ natural solutions";
+    return `Over ${products.length}+ natural solutions`;
+  }, [products]);
+
+  // Card items to display (use random selected products or fallbacks if loading/empty)
+  const card1 = randomProducts[0] || (products && products[0]) || {
+    id: "fallback-1",
+    name: "Organic Wellness Oil",
+    category: "Wellness",
+    price: 199,
+  };
+
+  const card2 = randomProducts[1] || (products && products[1]) || (products && products[0]) || {
+    id: "fallback-2",
+    name: "Herbal Care Extra",
+    category: "Herbs",
+    price: 299,
+  };
+
+  const card1Img = getProductImage(card1);
+  const card2Img = getProductImage(card2);
+  const card1Price = getProductPrice(card1);
+  const card2Price = getProductPrice(card2);
+
   return (
     <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#faf9f5] via-[#f4f7f2] to-[#e9f2e7] p-6 md:p-8 lg:p-10 border border-white/50 mb-6 flex flex-col lg:flex-row items-center justify-between gap-8 animate-fade-in">
       {/* Background ambient lighting */}
@@ -64,41 +139,77 @@ const HeroSection = () => {
             <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-[#1e5e3a]/20 rounded-full blur-2xl group-hover:scale-110 transition-transform duration-700"></div>
 
             {/* Inner aesthetic grid of organic showcase items */}
-            <div className="relative z-10 p-8 w-full h-full flex flex-col justify-between">
-              <div className="flex justify-between items-start">
+            <div className="relative z-10 p-6 sm:p-8 w-full h-full flex flex-col justify-between">
+              <div className="flex justify-between items-center">
                 <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#1e5e3a] bg-[#1e5e3a]/10 px-3 py-1 rounded-full">
                   Wellness Series
                 </span>
                 <span className="text-xs text-accent font-serif italic">✦ Pure & Certified</span>
               </div>
 
-              {/* Central Premium Graphic */}
-              <div className="flex flex-col items-center justify-center my-auto py-4">
-                <div className="relative">
-                  <div className="w-32 h-44 rounded-[20px] bg-gradient-to-b from-[#e8efe9] to-[#c6ded1] shadow-xl border border-white/50 flex flex-col justify-between p-4 transform -rotate-6 hover:rotate-0 transition-transform duration-500 cursor-pointer">
-                    <Leaf size={20} className="text-[#1e5e3a]" />
-                    <div className="flex flex-col text-left">
-                      <span className="text-[9px] uppercase tracking-wider font-bold text-[#1e5e3a]/60">SVARP</span>
-                      <span className="font-serif text-sm font-bold text-[#1e5e3a] leading-none">Organic Oil</span>
-                    </div>
-                  </div>
+              {/* Central Premium Graphic with Dynamic Random Products */}
+              <div className="flex flex-col items-center justify-center my-auto py-2 sm:py-4">
+                <div className="relative w-56 sm:w-64 h-56 sm:h-64 flex items-center justify-center">
+                  {/* Card 1 (Back/Left) */}
+                  <Link
+                    to={card1.id && (typeof card1.id !== "string" || !card1.id.startsWith("fallback")) ? `/product/${card1.id}` : "/shop"}
+                    className="w-36 sm:w-44 h-52 sm:h-56 rounded-[24px] shadow-xl border border-white/60 flex flex-col justify-between p-3.5 sm:p-4 transform -rotate-6 hover:rotate-0 hover:scale-105 transition-all duration-500 cursor-pointer text-left group/card1 absolute left-1 sm:left-2 top-0 overflow-hidden bg-gradient-to-b from-[#e8efe9] to-[#c6ded1] z-0"
+                  >
+                    {card1Img ? (
+                      <>
+                        <img
+                          src={card1Img}
+                          alt={card1.name}
+                          className="absolute inset-0 w-full h-full object-cover group-hover/card1:scale-110 transition-transform duration-500 z-0"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/10 z-0"></div>
+                      </>
+                    ) : null}
 
-                  <div className="w-28 h-36 rounded-[20px] bg-gradient-to-b from-[#faf5eb] to-[#eadecc] shadow-lg border border-white/50 flex flex-col justify-between p-4 absolute -bottom-6 -right-12 transform rotate-12 hover:rotate-0 transition-transform duration-500 cursor-pointer z-10">
-                    <Sparkles size={16} className="text-accent" />
-                    <div className="flex flex-col text-left">
-                      <span className="text-[8px] uppercase tracking-wider font-bold text-accent/80">SVARP</span>
-                      <span className="font-serif text-xs font-bold text-primary leading-none">Herbs Extra</span>
+                    <div className="relative z-10 flex flex-col text-left mt-auto">
+                      <span className={`font-serif text-xs sm:text-sm font-bold leading-tight line-clamp-2 ${card1Img ? 'text-white drop-shadow-sm' : 'text-[#1e5e3a]'}`}>
+                        {card1.name}
+                      </span>
+                      <span className={`text-xs sm:text-sm font-bold font-serif mt-1.5 px-2.5 py-0.5 rounded-full w-max shadow-sm ${card1Img ? 'bg-white text-[#1e5e3a]' : 'bg-white/70 text-[#1e5e3a] border border-white/40'}`}>
+                        ₹{card1Price}
+                      </span>
                     </div>
-                  </div>
+                  </Link>
+
+                  {/* Card 2 (Front/Right) */}
+                  <Link
+                    to={card2.id && (typeof card2.id !== "string" || !card2.id.startsWith("fallback")) ? `/product/${card2.id}` : "/shop"}
+                    className="w-32 sm:w-40 h-44 sm:h-48 rounded-[24px] shadow-2xl border border-white/60 flex flex-col justify-between p-3.5 sm:p-4 transform rotate-12 hover:rotate-0 hover:scale-105 transition-all duration-500 cursor-pointer text-left group/card2 absolute right-1 sm:right-2 bottom-0 overflow-hidden bg-gradient-to-b from-[#faf5eb] to-[#eadecc] z-10"
+                  >
+                    {card2Img ? (
+                      <>
+                        <img
+                          src={card2Img}
+                          alt={card2.name}
+                          className="absolute inset-0 w-full h-full object-cover group-hover/card2:scale-110 transition-transform duration-500 z-0"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/10 z-0"></div>
+                      </>
+                    ) : null}
+
+                    <div className="relative z-10 flex flex-col text-left mt-auto">
+                      <span className={`font-serif text-xs sm:text-sm font-bold leading-tight line-clamp-2 ${card2Img ? 'text-white drop-shadow-sm' : 'text-primary'}`}>
+                        {card2.name}
+                      </span>
+                      <span className={`text-xs sm:text-sm font-bold font-serif mt-1.5 px-2.5 py-0.5 rounded-full w-max shadow-sm ${card2Img ? 'bg-white text-primary' : 'bg-white/80 text-primary border border-white/40'}`}>
+                        ₹{card2Price}
+                      </span>
+                    </div>
+                  </Link>
                 </div>
               </div>
 
               <div className="flex justify-between items-end border-t border-[#1e5e3a]/10 pt-4">
                 <div className="flex flex-col text-left">
                   <span className="text-[10px] uppercase text-[#2d3a30]/50 tracking-wider">Starting at</span>
-                  <span className="text-xl font-bold font-serif text-[#1e5e3a]">₹199.00</span>
+                  <span className="text-xl font-bold font-serif text-[#1e5e3a]">₹{lowestPrice}.00</span>
                 </div>
-                <span className="text-xs text-[#2d3a30]/70 font-medium">Over 50+ natural solutions</span>
+                <span className="text-xs text-[#2d3a30]/70 font-medium">{totalSolutionsText}</span>
               </div>
             </div>
           </div>

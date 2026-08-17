@@ -82,25 +82,25 @@ const Testimonials = () => {
         </div>
 
         {/* Integrated Bottom Navigation & Dot Indicators */}
-        <div className="flex justify-center items-center gap-4 mt-5">
+        <div className="flex justify-center items-center gap-4 mt-6">
           <button
             onClick={prevSlide}
             aria-label="Previous review"
-            className="w-9 h-9 rounded-full bg-white shadow-sm border border-[#1e5e3a]/15 flex items-center justify-center text-[#1e5e3a] hover:bg-[#1e5e3a] hover:text-white transition-all cursor-pointer"
+            className="w-9 h-9 rounded-full bg-white shadow-sm border border-[#1e5e3a]/15 flex items-center justify-center text-[#1e5e3a] hover:bg-[#1e5e3a] hover:text-white transition-all duration-300 cursor-pointer hover:scale-105 active:scale-95 shrink-0"
           >
             <ChevronLeft size={18} />
           </button>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5 px-1">
             {testimonials.map((_, idx) => (
               <button
                 key={idx}
                 onClick={() => setCurrentIndex(idx)}
                 aria-label={`Go to slide ${idx + 1}`}
-                className={`transition-all duration-300 rounded-full cursor-pointer ${
+                className={`w-2.5 h-2.5 rounded-full p-0 m-0 border-0 outline-none cursor-pointer transition-all duration-300 shrink-0 ${
                   idx === currentIndex
-                    ? "w-7 h-2.5 bg-[#1e5e3a]"
-                    : "w-2.5 h-2.5 bg-[#1e5e3a]/25 hover:bg-[#1e5e3a]/50"
+                    ? "bg-[#1e5e3a] scale-125 shadow-sm"
+                    : "bg-[#1e5e3a]/30 hover:bg-[#1e5e3a]/60 scale-100"
                 }`}
               />
             ))}
@@ -109,7 +109,7 @@ const Testimonials = () => {
           <button
             onClick={nextSlide}
             aria-label="Next review"
-            className="w-9 h-9 rounded-full bg-white shadow-sm border border-[#1e5e3a]/15 flex items-center justify-center text-[#1e5e3a] hover:bg-[#1e5e3a] hover:text-white transition-all cursor-pointer"
+            className="w-9 h-9 rounded-full bg-white shadow-sm border border-[#1e5e3a]/15 flex items-center justify-center text-[#1e5e3a] hover:bg-[#1e5e3a] hover:text-white transition-all duration-300 cursor-pointer hover:scale-105 active:scale-95 shrink-0"
           >
             <ChevronRight size={18} />
           </button>
