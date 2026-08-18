@@ -32,13 +32,14 @@ const CartPage = () => {
   const [couponSuccess, setCouponSuccess] = useState("");
 
   const handleApplyCoupon = async () => {
-    if (!couponCode.trim()) return;
+    const formattedCode = couponCode.trim().toUpperCase();
+    if (!formattedCode) return;
     setApplyingCoupon(true);
     setCouponError("");
     setCouponSuccess("");
     try {
       const res = await api.post("/api/coupons/validate", {
-        code: couponCode,
+        code: formattedCode,
         subtotal: cartTotal,
         items: cartItems.map(item => {
           const priceStr = String(item.price).replace(/[^0-9.]/g, "");
@@ -56,10 +57,10 @@ const CartPage = () => {
         if (data.valid) {
           setAppliedCoupon({
             id: data.coupon_id,
-            code: couponCode.toUpperCase(),
+            code: formattedCode,
             discount_amount: data.discount_amount
           });
-          setCouponSuccess(`Coupon '${couponCode.toUpperCase()}' applied successfully!`);
+          setCouponSuccess(`Coupon '${formattedCode}' applied successfully!`);
         } else {
           setCouponError(data.message || "Invalid coupon code");
         }
@@ -392,7 +393,7 @@ const CartPage = () => {
                       type="text"
                       placeholder="Promo Code"
                       value={couponCode}
-                      onChange={(e) => setCouponCode(e.target.value)}
+                      onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                       disabled={!!appliedCoupon}
                       className="bg-white/60 border border-primary/10 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#1e5e3a] uppercase flex-1"
                     />
