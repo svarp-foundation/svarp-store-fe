@@ -8,6 +8,10 @@ import Footer from "../components/Footer";
 import { Trash2, Minus, Plus, ShoppingBag, ArrowRight } from "lucide-react";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
+const FREE_SHIPPING_THRESHOLD = 499;
+const DEFAULT_SHIPPING_FEE = 99;
+const GST_RATE = 0.18;
+
 const CartPage = () => {
   useDocumentTitle("Shopping Cart");
   const { cartItems, removeFromCart, updateQuantity, clearCart, cartTotal, cartCount } = useCart();
@@ -30,6 +34,14 @@ const CartPage = () => {
   const [applyingCoupon, setApplyingCoupon] = useState(false);
   const [couponError, setCouponError] = useState("");
   const [couponSuccess, setCouponSuccess] = useState("");
+
+  // Price & Tax calculations
+  const discount = appliedCoupon?.discount_amount || 0;
+  const discountedSubtotal = Math.max(0, cartTotal - discount);
+  const shippingCost = cartTotal >= FREE_SHIPPING_THRESHOLD ? 0 : DEFAULT_SHIPPING_FEE;
+  const taxableAndShippingTotal = discountedSubtotal + shippingCost;
+  const gstAmount = Math.round(taxableAndShippingTotal * GST_RATE);
+  const finalTotal = taxableAndShippingTotal + gstAmount;
 
   const handleApplyCoupon = async () => {
     const formattedCode = couponCode.trim().toUpperCase();
@@ -131,11 +143,7 @@ const CartPage = () => {
 
     setCheckoutLoading(true);
     try {
-      // Calculate discounted totals
-      const discount = appliedCoupon?.discount_amount || 0;
-      const discountedTotal = Math.max(0, cartTotal - discount);
-      const shippingCost = cartTotal >= 999 ? 0 : 99;
-      const finalTotal = discountedTotal + shippingCost;
+      // Calculate totals with 18% GST
       const amountInPaise = Math.round(finalTotal * 100);
 
       // Create payment order via BFF
@@ -262,7 +270,21 @@ const CartPage = () => {
     <>
       <div className="py-6 animate-fade-in">
         <h1 className="font-serif text-[2.5rem] md:text-[3rem] leading-none mb-2">Shopping Cart</h1>
-        <p className="text-[10px] uppercase tracking-[0.3em] text-primary/40 mb-8">{cartCount} items in your cart</p>
+        <p className="text-[10px] uppercase tracking-[0.3em] text-primary/40 mb-4">{cartCount} items in your cart</p>
+
+        {/* Free Shipping Banner */}
+        <div className="bg-[#1e5e3a]/10 border border-[#1e5e3a]/20 rounded-2xl p-4 mb-8 flex items-center justify-between text-sm">
+          {cartTotal >= FREE_SHIPPING_THRESHOLD ? (
+            <span className="text-[#1e5e3a] font-semibold flex items-center gap-2">
+              🎉 You qualify for FREE Delivery!
+            </span>
+          ) : (
+            <span className="text-primary/80 font-medium">
+              Add <strong className="text-[#1e5e3a]">₹{(FREE_SHIPPING_THRESHOLD - cartTotal).toFixed(0)}</strong> more to get <strong className="text-[#1e5e3a]">FREE Delivery</strong>!
+            </span>
+          )}
+          <span className="text-xs font-bold text-[#1e5e3a]/70 hidden sm:inline">Free Delivery at ₹{FREE_SHIPPING_THRESHOLD}</span>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items */}
@@ -383,7 +405,21 @@ const CartPage = () => {
                   <span>-&#x20b9;{appliedCoupon.discount_amount.toFixed(0)}</span>
                 </div>
               )}
-              <div className="flex justify-between"><span className="text-primary/60">Shipping</span><span className="text-green-600 font-medium">{cartTotal >= 999 ? "Free" : "₹99"}</span></div>
+              <div className="flex justify-between items-center">
+                <span className="text-primary/60">Shipping</span>
+                {cartTotal >= FREE_SHIPPING_THRESHOLD ? (
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-primary/40 line-through text-xs">₹{DEFAULT_SHIPPING_FEE}</span>
+                    <span className="text-green-600 font-bold">Free</span>
+                  </div>
+                ) : (
+                  <span className="font-medium">₹{DEFAULT_SHIPPING_FEE}</span>
+                )}
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-primary/60">GST (18%)</span>
+                <span className="font-medium text-primary/80">+&#x20b9;{gstAmount.toFixed(0)}</span>
+              </div>
               
               {/* Promo Code input */}
               {user && (
@@ -421,9 +457,7 @@ const CartPage = () => {
 
               <div className="border-t border-primary/5 pt-3 flex justify-between text-lg">
                 <span className="font-bold">Total</span>
-                <span className="font-bold text-accent">
-                  &#x20b9;{(Math.max(0, cartTotal - (appliedCoupon?.discount_amount || 0)) + (cartTotal >= 999 ? 0 : 99)).toFixed(0)}
-                </span>
+                <span className="font-bold text-accent">&#x20b9;{finalTotal.toFixed(0)}</span>
               </div>
             </div>
             <button
