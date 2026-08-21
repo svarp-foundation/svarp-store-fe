@@ -21,7 +21,7 @@ const OrdersPage = () => {
     if (user) {
       fetchOrders();
     }
-  }, [user, authLoading]);
+  }, [user, authLoading, navigate]);
 
   const fetchOrders = async () => {
     try {

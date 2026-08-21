@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Search, Mail, CheckCircle2, XCircle } from "lucide-react";
-
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+import { api } from "../../utils/api";
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
@@ -11,10 +10,7 @@ const AdminUsers = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const res = await fetch(`${API_BASE_URL}/api/admin/users`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get("/api/admin/users");
       if (res.ok) {
         const data = await res.json();
         setUsers(Array.isArray(data) ? data : []);

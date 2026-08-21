@@ -1,6 +1,6 @@
 /**
  * Centralized API client — all backend requests go through here.
- * Base URL loaded from environment variable.
+ * Handles headers, base URL, 401 token cleanup, and error catching.
  */
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
@@ -14,37 +14,60 @@ const getHeaders = () => {
 };
 
 export const api = {
-  async get(endpoint) {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      headers: getHeaders(),
-    });
-    return response;
+  async request(endpoint, options = {}) {
+    const url = `${API_BASE_URL}${endpoint}`;
+    const config = {
+      ...options,
+      headers: {
+        ...getHeaders(),
+        ...options.headers,
+      },
+    };
+
+    try {
+      const response = await fetch(url, config);
+      if (response.status === 401) {
+        localStorage.removeItem("token");
+        window.dispatchEvent(new Event("auth:logout"));
+      }
+      return response;
+    } catch (err) {
+      if (err.name === "AbortError") throw err;
+      console.error(`API Request Error [${endpoint}]:`, err);
+      throw err;
+    }
   },
 
-  async post(endpoint, data) {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+  get(endpoint, signal) {
+    return this.request(endpoint, { method: "GET", signal });
+  },
+
+  post(endpoint, data, signal) {
+    return this.request(endpoint, {
       method: "POST",
-      headers: getHeaders(),
-      body: JSON.stringify(data),
+      body: data !== undefined ? JSON.stringify(data) : undefined,
+      signal,
     });
-    return response;
   },
 
-  async put(endpoint, data) {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+  put(endpoint, data, signal) {
+    return this.request(endpoint, {
       method: "PUT",
-      headers: getHeaders(),
-      body: JSON.stringify(data),
+      body: data !== undefined ? JSON.stringify(data) : undefined,
+      signal,
     });
-    return response;
   },
 
-  async delete(endpoint) {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      method: "DELETE",
-      headers: getHeaders(),
+  patch(endpoint, data, signal) {
+    return this.request(endpoint, {
+      method: "PATCH",
+      body: data !== undefined ? JSON.stringify(data) : undefined,
+      signal,
     });
-    return response;
+  },
+
+  delete(endpoint, signal) {
+    return this.request(endpoint, { method: "DELETE", signal });
   },
 };
 

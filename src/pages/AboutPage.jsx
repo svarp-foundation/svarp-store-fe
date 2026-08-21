@@ -12,35 +12,10 @@ import {
   Users,
   Award,
   ArrowRight,
-  CheckCircle2,
-  Building2,
 } from "lucide-react";
 
 const AboutPage = () => {
   useDocumentTitle("About Us");
-
-  const values = [
-    {
-      icon: <Heart size={26} className="text-[#1e5e3a]" />,
-      title: "Wellness First",
-      desc: "Prioritizing natural well-being, holistic health, and pure nutrition in every product.",
-    },
-    {
-      icon: <Leaf size={26} className="text-[#1e5e3a]" />,
-      title: "100% Sustainable",
-      desc: "Responsibly sourced organic materials, eco-friendly packaging, and zero-waste farming.",
-    },
-    {
-      icon: <ShieldCheck size={26} className="text-[#1e5e3a]" />,
-      title: "Certified Quality",
-      desc: "Strict HSE and organic certification standards ensuring premium quality you can trust.",
-    },
-    {
-      icon: <Globe size={26} className="text-[#1e5e3a]" />,
-      title: "ESG & Sustainability",
-      desc: "Empowering communities through smart urban farming, green energy, and ESG integration.",
-    },
-  ];
 
   const focusAreas = [
     {

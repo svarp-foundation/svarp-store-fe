@@ -32,20 +32,30 @@ const AdminLogin = () => {
         const savedToken = localStorage.getItem("token");
         if (savedToken) {
           try {
-            const payload = JSON.parse(atob(savedToken.split(".")[1]));
+            const base64Url = savedToken.split(".")[1] || "";
+            const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+            const jsonPayload = decodeURIComponent(
+              atob(base64)
+                .split("")
+                .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+                .join("")
+            );
+            const payload = JSON.parse(jsonPayload);
             const roles = payload.roles || (payload.role ? [payload.role] : []);
             if (!roles.includes("admin") && payload.role !== "admin") {
               setError("Access denied: You are not authorized as an admin.");
               setLoading(false);
               return;
             }
-          } catch (e) {}
+          } catch (e) {
+            console.error("Token decoding error:", e);
+          }
         }
         navigate("/admin");
       } else {
         setError(res.error || "Invalid email or password");
       }
-    } catch (err) {
+    } catch {
       setError("An error occurred during login. Please try again.");
     } finally {
       setLoading(false);

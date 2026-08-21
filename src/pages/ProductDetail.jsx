@@ -173,7 +173,7 @@ const ProductDetail = () => {
     }, 3000);
 
     return () => clearInterval(timer);
-  }, [activeImagesKey]);
+  }, [activeImages, activeImagesKey]);
 
   const getSelectedAttrValue = (attrName) => {
     if (!selectedVariant) return "";
@@ -237,9 +237,7 @@ const ProductDetail = () => {
       sku: selectedVariant?.sku || product.sku,
       variant_attributes: selectedVariant?.attributes || null,
     };
-    for (let i = 0; i < quantity; i++) {
-      addToCart(cartItem);
-    }
+    addToCart(cartItem, quantity);
     navigate("/cart");
   };
 

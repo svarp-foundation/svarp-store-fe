@@ -1,48 +1,17 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Leaf, ArrowRight, ShieldCheck, Sparkles, Truck, RefreshCw } from "lucide-react";
 import { useProducts } from "../contexts/ProductContext";
-
-const getProductImage = (prod) => {
-  if (!prod) return null;
-  if (prod.image) return prod.image;
-  if (prod.images && Array.isArray(prod.images) && prod.images.length > 0 && prod.images[0]) {
-    return prod.images[0];
-  }
-  const variants = prod.real_variants || prod.variants || [];
-  for (const v of variants) {
-    if (v.images && Array.isArray(v.images) && v.images.length > 0 && v.images[0]) {
-      return v.images[0];
-    }
-    if (v.image) {
-      return v.image;
-    }
-  }
-  return null;
-};
-
-const getProductPrice = (prod) => {
-  if (!prod) return 199;
-  if (prod.real_variants && prod.real_variants.length > 0) {
-    return Math.min(...prod.real_variants.map((v) => v.price));
-  }
-  return typeof prod.price === "number" ? prod.price : (prod.base_price || 199);
-};
+import { getProductImage, getProductPrice } from "../utils/productUtils";
 
 const HeroSection = () => {
-  const { products, loading } = useProducts();
-  const [randomProducts, setRandomProducts] = useState([]);
+  const { products } = useProducts();
 
-  // Function to pick 2 random products from available products array
-  const pickRandomProducts = useCallback(() => {
-    if (!products || products.length === 0) return;
-    const shuffled = [...products].sort(() => 0.5 - Math.random());
-    setRandomProducts(shuffled.slice(0, 2));
+  // Compute 2 featured products from available products array
+  const randomProducts = useMemo(() => {
+    if (!products || products.length === 0) return [];
+    return products.slice(0, 2);
   }, [products]);
-
-  useEffect(() => {
-    pickRandomProducts();
-  }, [products, pickRandomProducts]);
 
   // Compute lowest starting price dynamically
   const lowestPrice = useMemo(() => {

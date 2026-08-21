@@ -80,7 +80,7 @@ const CartPage = () => {
         const data = await res.json();
         setCouponError(data.detail || "Invalid coupon code");
       }
-    } catch (err) {
+    } catch {
       setCouponError("Failed to validate coupon");
     } finally {
       setApplyingCoupon(false);
@@ -95,33 +95,33 @@ const CartPage = () => {
   };
 
   useEffect(() => {
-    if (user) {
-      fetchAddress();
-    }
-  }, [user]);
+    if (!user) return;
 
-  const fetchAddress = async () => {
-    try {
-      const res = await api.get("/api/auth/me/address");
-      if (res.ok) {
-        const data = await res.json();
-        if (data && data.full_name) {
-          setAddress({
-            full_name: data.full_name || "",
-            phone_number: data.phone_number || "",
-            address_line: data.address_line || "",
-            city: data.city || "",
-            state: data.state || "",
-            postal_code: data.postal_code || "",
-          });
-        } else {
-          setAddress((prev) => ({ ...prev, full_name: user.full_name || "" }));
+    const fetchAddress = async () => {
+      try {
+        const res = await api.get("/api/auth/me/address");
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.full_name) {
+            setAddress({
+              full_name: data.full_name || "",
+              phone_number: data.phone_number || "",
+              address_line: data.address_line || "",
+              city: data.city || "",
+              state: data.state || "",
+              postal_code: data.postal_code || "",
+            });
+          } else {
+            setAddress((prev) => ({ ...prev, full_name: user.full_name || "" }));
+          }
         }
+      } catch (err) {
+        console.error("Error fetching address:", err);
       }
-    } catch (err) {
-      console.error("Error fetching address:", err);
-    }
-  };
+    };
+
+    fetchAddress();
+  }, [user]);
 
   const showAlert = (msg) => {
     setError(msg);
@@ -138,6 +138,19 @@ const CartPage = () => {
 
     if (!address.full_name || !address.phone_number || !address.address_line || !address.city || !address.state || !address.postal_code) {
       showAlert("Please fill in all shipping address fields before checking out.");
+      return;
+    }
+
+    const phoneRegex = /^[0-9]{10,12}$/;
+    const cleanPhone = address.phone_number.replace(/[^0-9]/g, "");
+    if (!phoneRegex.test(cleanPhone)) {
+      showAlert("Please enter a valid 10-digit phone number.");
+      return;
+    }
+
+    const pinRegex = /^[0-9]{6}$/;
+    if (!pinRegex.test(address.postal_code.trim())) {
+      showAlert("Please enter a valid 6-digit postal PIN code.");
       return;
     }
 

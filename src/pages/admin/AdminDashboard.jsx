@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { api } from "../../utils/api";
 import {
   ShoppingBag,
   Package,
@@ -9,8 +10,6 @@ import {
   Plus,
   Search,
 } from "lucide-react";
-
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 const STATUS_BADGES = {
   pending: "bg-amber-50 text-amber-700 border-amber-200",
@@ -29,12 +28,8 @@ const AdminDashboard = () => {
   const [actionSearch, setActionSearch] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    
     // Fetch Store Admin Stats
-    fetch(`${API_BASE_URL}/api/admin/stats`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
+    api.get("/api/admin/stats")
       .then((res) => (res.ok ? res.json() : Promise.reject(res)))
       .then((data) => setStats(data))
       .catch((err) => console.error("Failed to fetch admin stats:", err))

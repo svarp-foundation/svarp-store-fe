@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { api } from "../../utils/api";
 import {
   Package,
   Plus,
@@ -9,8 +10,6 @@ import {
   AlertCircle,
   Image as ImageIcon,
 } from "lucide-react";
-
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
@@ -35,10 +34,7 @@ const AdminProducts = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const res = await fetch(`${API_BASE_URL}/api/admin/products`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get("/api/admin/products");
       if (res.ok) {
         const data = await res.json();
         const list = Array.isArray(data) ? data : data.items || [];
@@ -88,7 +84,6 @@ const AdminProducts = () => {
     setSaving(true);
     setMessage(null);
 
-    const token = localStorage.getItem("token");
     const payload = {
       name: formData.name,
       sku: formData.sku,
@@ -103,23 +98,9 @@ const AdminProducts = () => {
     try {
       let res;
       if (editingProduct) {
-        res = await fetch(`${API_BASE_URL}/api/admin/products/${editingProduct.id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        });
+        res = await api.put(`/api/admin/products/${editingProduct.id}`, payload);
       } else {
-        res = await fetch(`${API_BASE_URL}/api/admin/products`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        });
+        res = await api.post("/api/admin/products", payload);
       }
 
       if (res.ok) {
@@ -130,7 +111,7 @@ const AdminProducts = () => {
         const errData = await res.json();
         setMessage({ type: "error", text: errData.detail || "Operation failed" });
       }
-    } catch (err) {
+    } catch {
       setMessage({ type: "error", text: "Network error occurred" });
     } finally {
       setSaving(false);

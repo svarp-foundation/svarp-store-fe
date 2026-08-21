@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { api } from "../../utils/api";
 import {
   ShoppingBag,
   Search,
@@ -14,8 +15,6 @@ import {
   FileText,
   RefreshCw,
 } from "lucide-react";
-
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 const STATUS_BADGES = {
   pending: "bg-amber-50 text-amber-700 border-amber-200",
@@ -48,10 +47,7 @@ const AdminOrders = () => {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const res = await fetch(`${API_BASE_URL}/api/admin/orders`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get("/api/admin/orders");
       if (res.ok) {
         const data = await res.json();
         setOrders(Array.isArray(data) ? data : []);
@@ -72,10 +68,7 @@ const AdminOrders = () => {
     setLoadingDetail(true);
     const orderId = order.id || order.order_id;
     try {
-      const token = localStorage.getItem("token");
-      const res = await fetch(`${API_BASE_URL}/api/admin/orders/${orderId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get(`/api/admin/orders/${orderId}`);
       if (res.ok) {
         const data = await res.json();
         setViewingOrder(data);
@@ -94,19 +87,11 @@ const AdminOrders = () => {
     setUpdating(true);
     setMessage(null);
 
-    const token = localStorage.getItem("token");
     try {
       const orderId = selectedOrder.id || selectedOrder.order_id;
-      const res = await fetch(`${API_BASE_URL}/api/admin/orders/${orderId}/status`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          to_status: targetStatus,
-          notes: statusNotes,
-        }),
+      const res = await api.put(`/api/admin/orders/${orderId}/status`, {
+        to_status: targetStatus,
+        notes: statusNotes,
       });
 
       if (res.ok) {
@@ -120,7 +105,7 @@ const AdminOrders = () => {
         const errData = await res.json();
         setMessage({ type: "error", text: errData.detail || "Status transition failed" });
       }
-    } catch (err) {
+    } catch {
       setMessage({ type: "error", text: "Network error occurred" });
     } finally {
       setUpdating(false);

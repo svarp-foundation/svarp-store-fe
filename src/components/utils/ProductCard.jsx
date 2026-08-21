@@ -3,26 +3,11 @@ import Button from "./Button";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../contexts/CartContext";
 import { Star, ShoppingCart } from "lucide-react";
+import { getProductImage, getProductPrice } from "../../utils/productUtils";
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
   const navigate = useNavigate();
-
-  const getProductImage = (prod) => {
-    if (prod.image) return prod.image;
-    if (prod.images && prod.images.length > 0 && prod.images[0]) return prod.images[0];
-
-    const variants = prod.real_variants || prod.variants || [];
-    for (const v of variants) {
-      if (v.images && Array.isArray(v.images) && v.images.length > 0 && v.images[0]) {
-        return v.images[0];
-      }
-      if (v.image) {
-        return v.image;
-      }
-    }
-    return "/images/placeholder.webp";
-  };
 
   const imageUrl = getProductImage(product);
 
@@ -32,14 +17,7 @@ const ProductCard = ({ product }) => {
   const rating = product.rating || 4.8;
   const reviewsCount = product.reviews_count || 42;
 
-  const displayPrice = () => {
-    if (product.real_variants && product.real_variants.length > 0) {
-      return Math.min(...product.real_variants.map((v) => v.price));
-    }
-    return typeof product.price === "number" ? product.price : 199;
-  };
-
-  const finalPrice = displayPrice();
+  const finalPrice = getProductPrice(product);
 
   return (
     <div className="bg-white rounded-[20px] sm:rounded-[24px] p-3 sm:p-4 flex flex-col justify-between border border-[#1e5e3a]/5 hover:border-[#1e5e3a]/15 shadow-sm hover:shadow-xl transition-all duration-300 group relative overflow-hidden">

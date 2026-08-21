@@ -31,7 +31,11 @@ git pull origin "$BRANCH"
 
 if [ -f "package.json" ]; then
   echo -e "${YELLOW}➜ Installing node dependencies...${NC}"
-  npm install
+  if [ -f "package-lock.json" ]; then
+    npm ci
+  else
+    npm install
+  fi
 fi
 
 echo -e "${YELLOW}➜ Building production static assets (npm run build)...${NC}"

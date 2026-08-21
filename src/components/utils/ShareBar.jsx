@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Share2, Check, Copy } from "lucide-react";
-import { socialLinks } from "../../data/navigation";
 
-export default function ShareBar({ title, url = window.location.href, price, image }) {
+export default function ShareBar({ title, url = window.location.href, price }) {
   const [copied, setCopied] = useState(false);
 
   const shareText = `Check out ${title}${price ? ` (₹${price})` : ""} on SVARP Body Wellness:`;

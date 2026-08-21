@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from "react";
+import { api } from "../utils/api";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
@@ -8,12 +8,15 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchUser = async (token) => {
+  const logout = useCallback(() => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    setUser(null);
+  }, []);
+
+  const fetchUser = useCallback(async () => {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/auth/me`,
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
+      const response = await api.get("/api/auth/me");
       if (response.ok) {
         const data = await response.json();
         setUser(data);
@@ -26,16 +29,22 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [logout]);
+
+  useEffect(() => {
+    const handleAuthLogout = () => logout();
+    window.addEventListener("auth:logout", handleAuthLogout);
+    return () => window.removeEventListener("auth:logout", handleAuthLogout);
+  }, [logout]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      fetchUser(token);
+      fetchUser();
     } else {
       setLoading(false);
     }
-  }, []);
+  }, [fetchUser]);
 
   const formatError = (errorData, fallback) => {
     if (!errorData || !errorData.detail) return fallback;
@@ -58,24 +67,16 @@ export const AuthProvider = ({ children }) => {
     return fallback;
   };
 
-  const login = async (email, password) => {
+  const login = useCallback(async (email, password) => {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/auth/login`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        },
-      );
-
+      const response = await api.post("/api/auth/login", { email, password });
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem("token", data.access_token);
         if (data.user) {
           setUser(data.user);
         } else {
-          await fetchUser(data.access_token);
+          await fetchUser();
         }
         return { success: true };
       } else {
@@ -86,16 +87,11 @@ export const AuthProvider = ({ children }) => {
       console.error("Login request failed:", err);
       return { success: false, error: "Network or server error occurred" };
     }
-  };
+  }, [fetchUser]);
 
-  const sendOtp = async (email, purpose = "login") => {
+  const sendOtp = useCallback(async (email, purpose = "login") => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/otp/send`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, purpose }),
-      });
-
+      const response = await api.post("/api/auth/otp/send", { email, purpose });
       if (response.ok) {
         const data = await response.json();
         return { success: true, data };
@@ -107,16 +103,11 @@ export const AuthProvider = ({ children }) => {
       console.error("OTP send failed:", err);
       return { success: false, error: "Failed to connect to email portal" };
     }
-  };
+  }, []);
 
-  const verifyOtp = async (email, otpCode, purpose = "login") => {
+  const verifyOtp = useCallback(async (email, otpCode, purpose = "login") => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/otp/verify`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, otp_code: otpCode, purpose }),
-      });
-
+      const response = await api.post("/api/auth/otp/verify", { email, otp_code: otpCode, purpose });
       if (response.ok) {
         const data = await response.json();
         if (data.access_token) {
@@ -124,7 +115,7 @@ export const AuthProvider = ({ children }) => {
           if (data.user) {
             setUser(data.user);
           } else {
-            await fetchUser(data.access_token);
+            await fetchUser();
           }
         }
         return { success: true, data };
@@ -136,26 +127,18 @@ export const AuthProvider = ({ children }) => {
       console.error("OTP verify failed:", err);
       return { success: false, error: "Failed to connect to email portal" };
     }
-  };
+  }, [fetchUser]);
 
-  const signup = async (email, password, fullName, otpCode) => {
+  const signup = useCallback(async (email, password, fullName, otpCode) => {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/auth/signup`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password, full_name: fullName, otp_code: otpCode }),
-        },
-      );
-
+      const response = await api.post("/api/auth/signup", { email, password, full_name: fullName, otp_code: otpCode });
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem("token", data.access_token);
         if (data.user) {
           setUser(data.user);
         } else {
-          await fetchUser(data.access_token);
+          await fetchUser();
         }
         return { success: true };
       } else {
@@ -166,16 +149,15 @@ export const AuthProvider = ({ children }) => {
       console.error("Signup request failed:", err);
       return { success: false, error: "Network or server error occurred" };
     }
-  };
+  }, [fetchUser]);
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("email");
-    setUser(null);
-  };
+  const value = useMemo(
+    () => ({ user, loading, login, sendOtp, verifyOtp, signup, logout }),
+    [user, loading, login, sendOtp, verifyOtp, signup, logout]
+  );
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, sendOtp, verifyOtp, signup, logout }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
